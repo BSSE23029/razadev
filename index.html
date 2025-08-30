@@ -13,7 +13,10 @@
     <link rel="shortcut icon" href="logos/dark/raza_logo.ico">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -26,12 +29,12 @@
         }
 
         :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #0f0f23;
-            --light: #ffffff;
-            --gray: #64748b;
+            --primary: #06b6d4;
+            --secondary: #0891b2;
+            --accent: #0e7490;
+            --dark: #ffffff;
+            --light: #0f172a;
+            --gray: #475569;
         }
 
         body {
@@ -50,7 +53,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: linear-gradient(45deg, var(--dark), #1a1a3e, var(--dark));
+            background: linear-gradient(45deg, var(--dark), #f8fafc, var(--dark));
             background-size: 400% 400%;
             animation: gradientShift 8s ease infinite;
         }
@@ -62,9 +65,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3), transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3), transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2), transparent 50%);
+            background: radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.3), transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(8, 145, 178, 0.3), transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(14, 116, 144, 0.2), transparent 50%);
             animation: floatingOrbs 12s ease-in-out infinite;
         }
 
@@ -102,9 +105,9 @@
             top: 0;
             width: 100%;
             padding: 1.2rem 2rem;
-            background: rgba(15, 15, 35, 0.85);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.1);
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -132,7 +135,7 @@
 
         .logo:hover {
             transform: scale(1.05);
-            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4));
+            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.4));
         }
 
         .nav-links {
@@ -143,7 +146,7 @@
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(15, 23, 42, 0.9);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
@@ -155,7 +158,7 @@
 
         .nav-links a:hover {
             color: var(--light);
-            background: rgba(99, 102, 241, 0.15);
+            background: rgba(6, 182, 212, 0.15);
             transform: translateY(-1px);
         }
 
@@ -195,9 +198,9 @@
         /* Enhanced scrolled nav state */
         nav.scrolled {
             padding: 0.8rem 2rem;
-            background: rgba(15, 15, 35, 0.95);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(30px);
-            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
@@ -217,9 +220,10 @@
             animation: fadeInUp 1s ease 0.3s both;
         }
 
+        /* Enhanced Typography */
         .hero-title {
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 800;
+            font-weight: 900;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
             -webkit-background-clip: text;
@@ -227,27 +231,58 @@
             background-clip: text;
             position: relative;
             animation: titleGlow 3s ease-in-out infinite;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            text-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
         }
 
         .hero-subtitle {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
             color: var(--gray);
             margin-bottom: 2rem;
             animation: fadeInUp 1s ease 0.6s both;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Code/Tech Typography */
+        .code-text {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-weight: 500;
+        }
+
+        /* Section Titles Enhancement */
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
         .cta-button {
             display: inline-block;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--light);
+            color: var(--dark);
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 1.05rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             animation: fadeInUp 1s ease 0.9s both;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+            letter-spacing: 0.01em;
         }
 
         .cta-button::before {
@@ -257,60 +292,93 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
         }
 
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(6, 182, 212, 0.4);
+            background: linear-gradient(135deg, #0891b2, #0e7490);
         }
 
         .cta-button:hover::before {
             left: 100%;
         }
 
-        /* Floating Elements */
+        .cta-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Enhanced Floating Elements */
         .floating-element {
             position: absolute;
-            opacity: 0.6;
-            animation: float 6s ease-in-out infinite;
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+            filter: blur(0.5px);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .floating-element:hover {
+            opacity: 0.8;
+            filter: blur(0px);
+            transform: scale(1.1);
         }
 
         .floating-element:nth-child(1) {
-            top: 20%;
-            left: 10%;
+            top: 15%;
+            left: 8%;
             animation-delay: 0s;
+            animation-duration: 8s;
         }
 
         .floating-element:nth-child(2) {
-            top: 60%;
-            right: 10%;
+            top: 25%;
+            right: 12%;
             animation-delay: 2s;
+            animation-duration: 10s;
         }
 
         .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
+            bottom: 30%;
+            left: 15%;
             animation-delay: 4s;
+            animation-duration: 9s;
         }
 
-        /* Skills Section */
+        .floating-element:nth-child(4) {
+            top: 60%;
+            right: 25%;
+            animation-delay: 1s;
+            animation-duration: 7s;
+        }
+
+        .floating-element:nth-child(5) {
+            bottom: 15%;
+            right: 8%;
+            animation-delay: 3s;
+            animation-duration: 11s;
+        }
+
+        .floating-element:nth-child(6) {
+            top: 40%;
+            left: 5%;
+            animation-delay: 5s;
+            animation-duration: 9s;
+        }
+
+        .floating-element:nth-child(7) {
+            bottom: 45%;
+            right: 35%;
+            animation-delay: 2.5s;
+            animation-duration: 8.5s;
+        }
+
         .skills {
             padding: 5rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .skills-grid {
@@ -321,15 +389,16 @@
         }
 
         .skill-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem 2rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            transform: translateY(0);
         }
 
         .skill-card::before {
@@ -339,48 +408,91 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.12), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.05), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 60px rgba(6, 182, 212, 0.25);
+            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .skill-card:hover::before {
             left: 100%;
         }
 
+        .skill-card:hover::after {
+            opacity: 1;
+        }
+
         .skill-icon {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: var(--primary);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 5rem;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .skill-icon svg {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 4px 8px rgba(6, 182, 212, 0.3));
         }
 
         .skill-icon img {
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-card:hover .skill-icon {
+            transform: scale(1.1);
+        }
+
+        .skill-card:hover .skill-icon svg {
+            transform: rotate(10deg) scale(1.1);
+            filter: drop-shadow(0 6px 15px rgba(6, 182, 212, 0.5)) brightness(1.2);
         }
 
         .skill-card:hover .skill-icon img {
-            transform: scale(1.1) rotate(5deg);
-            filter: brightness(1.5) !important;
+            transform: scale(1.15) rotate(8deg);
+            filter: brightness(1.3) !important;
+        }
+
+        .skill-card:hover .skill-icon i {
+            transform: scale(1.15) rotate(8deg);
+            filter: brightness(1.2) drop-shadow(0 0 15px currentColor);
         }
 
         .skill-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--light);
+            letter-spacing: -0.01em;
+            line-height: 1.3;
         }
 
         .skill-description {
             color: var(--gray);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         /* About Section */
@@ -470,7 +582,7 @@
         .contact {
             padding: 5rem 2rem;
             text-align: center;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.1));
         }
 
         .contact-content {
@@ -479,22 +591,45 @@
         }
 
         .contact-email {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-block;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             border: 2px solid var(--primary);
             border-radius: 50px;
             margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.01em;
+        }
+
+        .contact-email::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
         }
 
         .contact-email:hover {
-            background: var(--primary);
-            color: var(--light);
-            transform: scale(1.05);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.3);
+        }
+
+        .contact-email:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
         /* Animations */
@@ -514,11 +649,11 @@
 
             0%,
             100% {
-                filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));
+                filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.15));
             }
 
             50% {
-                filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.5));
+                filter: drop-shadow(0 0 12px rgba(8, 145, 178, 0.25));
             }
         }
 
@@ -526,11 +661,19 @@
 
             0%,
             100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translateY(0px) rotate(0deg) scale(1);
+            }
+
+            25% {
+                transform: translateY(-15px) rotate(90deg) scale(1.05);
             }
 
             50% {
-                transform: translateY(-20px) rotate(180deg);
+                transform: translateY(-25px) rotate(180deg) scale(0.95);
+            }
+
+            75% {
+                transform: translateY(-10px) rotate(270deg) scale(1.02);
             }
         }
 
@@ -585,7 +728,7 @@
         .cursor-follower {
             width: 40px;
             height: 40px;
-            background: rgba(99, 102, 241, 0.1);
+            background: rgba(6, 182, 212, 0.1);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
@@ -699,7 +842,7 @@
         .loader {
             width: 80px;
             height: 80px;
-            border: 3px solid rgba(99, 102, 241, 0.3);
+            border: 3px solid rgba(6, 182, 212, 0.3);
             border-top: 3px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -713,7 +856,7 @@
             left: -3px;
             right: -3px;
             bottom: -3px;
-            border: 3px solid rgba(139, 92, 246, 0.2);
+            border: 3px solid rgba(8, 145, 178, 0.2);
             border-top: 3px solid var(--secondary);
             border-radius: 50%;
             animation: spin 2s linear infinite reverse;
@@ -798,7 +941,7 @@
         }
 
         .custom-icon:hover {
-            filter: brightness(1.5) drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+            filter: brightness(1.5) drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
             transform: scale(1.1);
         }
 
@@ -806,7 +949,7 @@
             width: 4rem;
             height: 4rem;
             object-fit: contain;
-            filter: brightness(1.3) drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(6, 182, 212, 0.4));
             border-radius: 6px;
         }
 
@@ -838,12 +981,12 @@
             width: 6rem;
             height: 6rem;
             object-fit: contain;
-            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.5));
+            filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.5));
             transition: all 0.3s ease;
         }
 
         .brand-logo:hover {
-            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)) brightness(1.2);
+            filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8)) brightness(1.2);
             transform: scale(1.1) rotate(5deg);
         }
 
@@ -859,61 +1002,173 @@
 
         .tech-logo:hover {
             transform: scale(1.2) translateY(-5px);
-            filter: brightness(1.3) drop-shadow(0 5px 15px rgba(99, 102, 241, 0.4));
+            filter: brightness(1.3) drop-shadow(0 5px 15px rgba(6, 182, 212, 0.4));
         }
 
-        /* Responsive Design */
+        /* Enhanced Mobile Responsiveness */
         @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+
             .nav-links {
                 display: none;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: rgba(15, 15, 35, 0.95);
+                background: rgba(255, 255, 255, 0.98);
                 backdrop-filter: blur(25px);
                 flex-direction: column;
                 gap: 0;
-                padding: 1rem 0;
-                border-top: 1px solid rgba(99, 102, 241, 0.1);
+                padding: 1.5rem 0;
+                border-top: 1px solid rgba(6, 182, 212, 0.2);
+                border-radius: 0 0 20px 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             }
 
             .nav-links.active {
                 display: flex;
+                animation: slideDown 0.3s ease-out;
             }
 
             .nav-links a {
-                padding: 1rem 2rem;
+                padding: 1.2rem 2rem;
                 border-radius: 0;
                 width: 100%;
                 text-align: left;
+                font-size: 1.1rem;
+                border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
             }
 
             .mobile-menu-btn {
                 display: block;
+                font-size: 1.8rem;
+                padding: 0.5rem;
+            }
+
+            .hero {
+                padding: 0 1rem;
+                min-height: 80vh;
+            }
+
+            .hero-content {
+                padding: 0 1rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.2rem, 8vw, 3.5rem);
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: clamp(1rem, 4vw, 1.3rem);
+                margin-bottom: 2.5rem;
+                padding: 0 1rem;
+            }
+
+            .cta-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.1rem;
+                border-radius: 30px;
+            }
+
+            .skills {
+                padding: 3rem 1rem;
             }
 
             .skills-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-top: 2rem;
             }
 
-            .hero-title {
-                font-size: 2.5rem;
+            .skill-card {
+                padding: 2rem 1.5rem;
+                border-radius: 15px;
+            }
+
+            .skill-title {
+                font-size: 1.2rem;
+            }
+
+            .skill-description {
+                font-size: 0.9rem;
+                line-height: 1.6;
             }
 
             .about {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 3rem;
+                padding: 3rem 1rem;
+            }
+
+            .about-text {
+                order: 2;
+            }
+
+            .about-image {
+                order: 1;
+            }
+
+            .profile-card {
+                padding: 2rem;
+                border-radius: 20px;
+            }
+
+            .timeline {
+                padding: 1rem 0;
             }
 
             .timeline::before {
-                left: 20px;
+                left: 15px;
             }
 
             .timeline-item:nth-child(odd) .timeline-content,
             .timeline-item:nth-child(even) .timeline-content {
                 margin: 0;
-                margin-left: 3rem;
+                margin-left: 2.5rem;
+            }
+
+            .timeline-content {
+                padding: 1.2rem;
+                border-radius: 12px;
+            }
+
+            .contact {
+                padding: 3rem 1rem;
+            }
+
+            .contact-email {
+                font-size: 1.2rem;
+                padding: 1rem 1.8rem;
+                border-radius: 30px;
+            }
+
+            .tech-stack {
+                margin-top: 3rem !important;
+            }
+
+            .tech-icons {
+                gap: 1.5rem !important;
+                padding: 0 1rem;
+            }
+
+            .tech-item {
+                transform: none !important;
+            }
+
+            .section-title {
+                font-size: clamp(2rem, 6vw, 2.8rem);
+                margin-bottom: 2rem;
+            }
+
+            .floating-element {
+                display: none;
             }
 
             .cursor,
@@ -921,8 +1176,126 @@
                 display: none;
             }
 
+            /* Mobile-specific animations */
+            .mobile-slide-in {
+                animation: mobileSlideIn 0.6s ease-out;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes mobileSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Tablet Responsiveness */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .about {
+                gap: 3rem;
+            }
+
+            .hero-title {
+                font-size: clamp(3rem, 7vw, 4rem);
+            }
+
+            .floating-element {
+                opacity: 0.3;
+            }
+
             .tech-icons {
-                gap: 1.5rem;
+                gap: 2rem;
+            }
+        }
+
+        /* Small Mobile Devices */
+        @media (max-width: 480px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .brand-logo {
+                width: 3.5rem !important;
+                height: 3.5rem !important;
+            }
+
+            .hero {
+                min-height: 75vh;
+                padding: 0 0.5rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 9vw, 3rem);
+                margin-bottom: 1rem;
+            }
+
+            .hero-subtitle {
+                font-size: clamp(0.95rem, 4.5vw, 1.2rem);
+                padding: 0 0.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .skills,
+            .about,
+            .contact {
+                padding: 2.5rem 1rem;
+            }
+
+            .skill-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .section-title {
+                font-size: clamp(1.8rem, 7vw, 2.5rem);
+                margin-bottom: 1.5rem;
+            }
+
+            .profile-card {
+                padding: 1.5rem;
+            }
+
+            .timeline-content {
+                padding: 1rem;
+            }
+
+            .tech-icons {
+                gap: 1rem !important;
+            }
+
+            .contact-email {
+                font-size: 1.1rem;
+                padding: 0.9rem 1.5rem;
             }
         }
     </style>
@@ -957,7 +1330,7 @@
         <div class="nav-container">
             <a href="#" class="logo">
                 <img src="logos/dark/raza_logo_no_bg.png" alt="Raza Logo" class="brand-logo"
-                    style="width: 4.4rem; height: 4.4rem; filter: brightness(1.1) drop-shadow(0 0 10px rgba(99, 102, 241, 0.3));">
+                    style="width: 4.4rem; height: 4.4rem; filter: brightness(1.1) drop-shadow(0 0 10px rgba(6, 182, 212, 0.3));">
                 <span
                     style="background: linear-gradient(135deg, var(--primary), var(--light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">RAZA</span>
             </a>
@@ -975,16 +1348,17 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
+        <!-- Enhanced Floating Logo Elements -->
         <div class="floating-element">
-            <img src="logos/dark/raza_logo_no_bg.png" alt="Dark Logo" class="floating-custom-icon">
+            <img src="logos/light/raza_logo_no_bg.png" alt="Raza Logo Dark" class="floating-custom-icon">
         </div>
         <div class="floating-element">
-            <img src="logos/light/raza_logo.webp" alt="Light Logo" class="floating-custom-icon"
-                style="filter: hue-rotate(120deg) brightness(1.3) drop-shadow(0 0 12px rgba(139, 92, 246, 0.5));">
+            <img src="logos/light/raza_logo.webp" alt="Raza Logo Light" class="floating-custom-icon"
+                style="filter: hue-rotate(180deg) brightness(1.3) drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));">
         </div>
         <div class="floating-element">
-            <img src="logos/dark/raza_logo.jpeg" alt="Mixed Logo" class="floating-custom-icon"
-                style="filter: hue-rotate(240deg) brightness(1.2) drop-shadow(0 0 10px rgba(236, 72, 153, 0.4));">
+            <img src="logos/dark/raza_logo.webp" alt="Raza Logo JPEG" class="floating-custom-icon"
+                style="filter: hue-rotate(200deg) brightness(1.2) drop-shadow(0 0 10px rgba(8, 145, 178, 0.4));">
         </div>
 
         <div class="hero-content">
@@ -1000,17 +1374,18 @@
         <div class="skills-grid">
             <div class="skill-card glass-card card-3d magnetic">
                 <div class="card-inner">
+                    <!-- This is the NEW, high-quality SVG -->
                     <div class="skill-icon">
-                        <i class="fab fa-flutter" style="color: #02569B; font-size: 3rem;"></i>
-                        <!-- Enhanced SVG backup for Flutter -->
-                        <svg style="width: 3rem; height: 3rem; color: #02569B; display: none;" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M14.314 0L2.3 12 6 15.7 19.7 0h-5.386zm.174 13.86L9.857 19.5 6.171 15.81l4.316-4.32 4.31 4.31-4.31 4.31z" />
+                        <svg width="48" height="48" viewBox="0 0 88 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M53.1516 63.6558L27.2335 89.5739L1 63.3404L37.108 37.2324L53.1516 63.6558Z"
+                                fill="#027DFD" />
+                            <path d="M53.4659 63.2427L87.5 29.2085V0.5L27.2335 60.7665L53.4659 63.2427Z"
+                                fill="#40D0FD" />
+                            <path d="M53.1516 89.8878L87.5 55.5394V107.574L53.1516 89.8878Z" fill="#0553B1" />
                         </svg>
                     </div>
                     <h3 class="skill-title">Flutter Development</h3>
-                    <p class="skill-description">Production-grade mobile apps with 100k+ line codebases, custom
+                    <p class="skill-description">Production-grade mobile apps with 50k+ line codebases, custom
                         UI/animations, and scalable architecture</p>
                 </div>
             </div>
@@ -1075,12 +1450,12 @@
                     style="display: flex; flex-direction: column; align-items: center; transition: all 0.3s ease;">
                     <div
                         style="display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; margin-bottom: 0.5rem;">
-                        <i class="fab fa-flutter" style="font-size: 2.5rem; color: #02569B;"></i>
-                        <!-- SVG backup for Flutter -->
-                        <svg style="width: 2.5rem; height: 2.5rem; color: #02569B; display: none;" viewBox="0 0 24 24"
-                            fill="currentColor">
-                            <path
-                                d="M14.314 0L2.3 12 6 15.7 19.7 0h-5.386zm.174 13.86L9.857 19.5 6.171 15.81l4.316-4.32 4.31 4.31-4.31 4.31z" />
+                        <svg width="40" height="40" viewBox="0 0 88 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M53.1516 63.6558L27.2335 89.5739L1 63.3404L37.108 37.2324L53.1516 63.6558Z"
+                                fill="#027DFD" />
+                            <path d="M53.4659 63.2427L87.5 29.2085V0.5L27.2335 60.7665L53.4659 63.2427Z"
+                                fill="#40D0FD" />
+                            <path d="M53.1516 89.8878L87.5 55.5394V107.574L53.1516 89.8878Z" fill="#0553B1" />
                         </svg>
                     </div>
                     <span style="color: var(--gray); font-size: 0.8rem;">Flutter</span>
@@ -1129,7 +1504,7 @@
         <div class="about-text">
             <h2 class="section-title reveal-text">About Me</h2>
             <p style="color: var(--gray); font-size: 1.2rem; line-height: 1.8; margin-bottom: 2rem;">
-                I'm a BS Software Engineering student at ITU Lahore, passionate about building scalable software
+                I'm a BS Software Engineering student, passionate about building scalable software
                 solutions.
                 From production-grade Flutter applications to machine learning models and systems programming,
                 I enjoy tackling complex technical challenges across the full stack.
@@ -1160,8 +1535,8 @@
             <div class="profile-card glass-card">
                 <div style="text-align: center;">
                     <div
-                        style="width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; padding: 1rem; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);">
-                        <img src="logos/dark/raza_logo_no_bg.png" alt="Raza Profile"
+                        style="width: 140px; height: 140px; border-radius: 50%; background: rgba(45, 212, 191, 0.2); /* <-- Lighter Cyan Background */ border: 1px solid rgba(45, 212, 191, 0.3); /* Optional: adds a nice border */ margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; padding: 1rem; box-shadow: 0 0 30px rgba(45, 212, 191, 0.4); /* Optional: matches the glow to the new color */">
+                        <img src="logos/light/raza_logo_no_bg.png" alt="Raza Profile"
                             style="width: 250px; height: 250px; object-fit: contain; filter: brightness(1.2) drop-shadow(0 0 5px rgba(255,255,255,0.3));" />
                     </div>
                     <h3 style="margin-bottom: 1rem; color: var(--light);">Raza</h3>
@@ -1239,10 +1614,10 @@
         }
 
         const draw = () => {
-            ctx.fillStyle = 'rgba(15, 15, 35, 0.05)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#6366f1';
+            ctx.fillStyle = '#06b6d4';
             ctx.font = fontSize + 'px monospace';
 
             for (let i = 0; i < rainDrops.length; i++) {
@@ -1423,36 +1798,6 @@
             });
         });
 
-        // Enhanced Flutter icon fallback - check if Font Awesome loaded properly
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const flutterIcons = document.querySelectorAll('.fab.fa-flutter');
-                flutterIcons.forEach(icon => {
-                    // Check if the icon is rendering properly
-                    const computedStyle = window.getComputedStyle(icon, ':before');
-                    const content = computedStyle.getPropertyValue('content');
-
-                    // Additional check: see if the icon has actual content
-                    const rect = icon.getBoundingClientRect();
-                    const isEmpty = rect.width === 0 || rect.height === 0;
-
-                    // If Font Awesome didn't load, icon is empty, or the icon isn't showing, show SVG backup
-                    if (!content || content === 'none' || content === '""' || isEmpty) {
-                        console.log('Flutter icon fallback activated');
-                        icon.style.display = 'none';
-                        const svgBackup = icon.nextElementSibling;
-                        if (svgBackup && svgBackup.tagName === 'svg') {
-                            svgBackup.style.display = 'inline-block';
-                        }
-                    } else {
-                        // Ensure the icon is visible and properly styled
-                        icon.style.display = 'inline-block';
-                        icon.style.visibility = 'visible';
-                    }
-                });
-            }, 200); // Increased timeout to ensure Font Awesome loads
-        });
-
         // Enhanced tech item interactions
         document.querySelectorAll('.tech-item').forEach(item => {
             item.addEventListener('mouseenter', () => {
@@ -1460,6 +1805,11 @@
                 const img = item.querySelector('img');
                 if (img) {
                     img.style.filter = img.style.filter + ' brightness(1.3)';
+                }
+                const svg = item.querySelector('svg');
+                if (svg) {
+                    svg.style.transform = 'scale(1.1) rotate(5deg)';
+                    svg.style.filter = 'brightness(1.3) drop-shadow(0 0 10px rgba(6, 182, 212, 0.6))';
                 }
             });
 
@@ -1469,8 +1819,39 @@
                 if (img) {
                     img.style.filter = img.style.filter.replace(' brightness(1.3)', '');
                 }
+                const svg = item.querySelector('svg');
+                if (svg) {
+                    svg.style.transform = 'scale(1) rotate(0deg)';
+                    svg.style.filter = 'none';
+                }
             });
-        });    </script>
+        });
+
+        // Mobile-friendly interactions
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.skill-card').forEach(card => {
+                card.classList.add('mobile-slide-in');
+            });
+        }
+
+        // Improved scroll-based animations for mobile
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            // Disable complex animations on mobile for better performance
+            document.querySelectorAll('.floating-element').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Add touch-friendly hover states
+            document.querySelectorAll('.skill-card, .cta-button, .contact-email').forEach(el => {
+                el.addEventListener('touchstart', () => {
+                    el.style.transform = 'scale(0.98)';
+                });
+                el.addEventListener('touchend', () => {
+                    el.style.transform = 'scale(1)';
+                });
+            });
+        }    </script>
 </body>
 
 </html>
