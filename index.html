@@ -630,6 +630,18 @@
             background-clip: text;
             position: relative;
             animation: titleGlow 3s ease-in-out infinite alternate;
+            min-height: 1.2em;
+        }
+
+        .typing-cursor {
+            animation: blink 1s step-end infinite;
+            color: var(--primary);
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .hero-subtitle {
@@ -764,6 +776,8 @@
             overflow: hidden;
             cursor: pointer;
             box-shadow: var(--shadow-sm);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .skill-card::before {
@@ -778,8 +792,23 @@
             transition: opacity 0.3s var(--ease-default);
         }
 
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s var(--ease-default);
+        }
+
+        .skill-card:hover::after {
+            transform: translateX(100%);
+        }
+
         .skill-card:hover {
-            transform: translateY(-12px) scale(1.03);
             box-shadow: var(--shadow-2xl);
             border-color: rgba(0, 122, 255, 0.3);
         }
@@ -1174,6 +1203,192 @@
             font-weight: 600;
         }
 
+        /* ===== GITHUB ACTIVITY SECTION ===== */
+        .github-activity {
+            padding: var(--space-24) var(--space-6);
+            background: var(--surface-primary);
+            position: relative;
+        }
+
+        .github-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .github-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-10);
+        }
+
+        .stat-card {
+            background: var(--surface-secondary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s var(--ease-default);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .contribution-graph {
+            margin: var(--space-10) 0;
+            padding: var(--space-6);
+            background: var(--surface-secondary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .github-streak {
+            display: flex;
+            justify-content: center;
+            margin: var(--space-10) 0;
+            padding: var(--space-4);
+            background: var(--surface-secondary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .github-streak img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Commits Feed Styles */
+        .commits-feed {
+            margin: var(--space-10) 0;
+            padding: var(--space-6);
+            background: var(--surface-secondary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .commits-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .loading-commits {
+            text-align: center;
+            padding: var(--space-8);
+        }
+
+        .commit-item {
+            padding: var(--space-4);
+            background: var(--surface-primary);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--primary);
+            transition: all 0.3s var(--ease-default);
+            cursor: pointer;
+        }
+
+        .commit-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+            background: var(--surface-tertiary);
+        }
+
+        .commit-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .commit-repo {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .commit-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-left: auto;
+        }
+
+        .commit-message {
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: var(--space-2);
+        }
+
+        .commit-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .commit-sha {
+            font-family: var(--font-mono);
+            background: var(--surface-quaternary);
+            padding: 2px 6px;
+            border-radius: var(--radius-xs);
+        }
+
+        /* Dark mode adjustments for GitHub widgets */
+        [data-theme="dark"] .stat-card img,
+        [data-theme="dark"] .github-streak img {
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .github-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .contribution-graph img {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .tech-quote-banner {
+                padding: var(--space-5) var(--space-5);
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .quote-text {
+                font-size: 13px;
+            }
+
+            .quote-refresh {
+                width: 32px;
+                height: 32px;
+                align-self: center;
+            }
+
+            .email-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .contact-email {
+                width: 100%;
+                justify-content: center;
+                font-size: 16px;
+                padding: var(--space-4) var(--space-6);
+            }
+        }
+
         /* ===== CONTACT SECTION ===== */
         .contact {
             padding: var(--space-24) var(--space-6);
@@ -1219,6 +1434,13 @@
             z-index: 2;
         }
 
+        .email-container {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin-top: var(--space-8);
+        }
+
         .contact-email {
             display: inline-flex;
             align-items: center;
@@ -1231,7 +1453,6 @@
             font-weight: 600;
             font-size: 18px;
             font-family: var(--font-mono);
-            margin-top: var(--space-8);
             transition: all 0.3s var(--ease-default);
             box-shadow: var(--shadow-lg);
             position: relative;
@@ -1262,6 +1483,45 @@
 
         .contact-email:active {
             transform: translateY(-2px) scale(1.02);
+        }
+
+        .copy-email-btn {
+            width: 56px;
+            height: 56px;
+            background: var(--surface-secondary);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-default);
+            font-size: 18px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .copy-email-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .copy-email-btn:active {
+            transform: scale(0.95) rotate(0deg);
+        }
+
+        .copy-email-btn.copied {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            animation: copySuccess 0.6s var(--ease-bounce);
+        }
+
+        @keyframes copySuccess {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(360deg); }
         }
 
         /* ===== ENHANCED ANIMATIONS ===== */
@@ -1333,8 +1593,9 @@
             width: 100%;
             height: 3px;
             background: rgba(0, 122, 255, 0.1);
-            z-index: 1001;
+            z-index: 1002;
             transition: opacity 0.3s var(--ease-default);
+            pointer-events: none;
         }
 
         .scroll-progress {
@@ -1511,25 +1772,6 @@
                 --text-secondary: rgba(60, 60, 67, 0.8);
                 --surface-tertiary: rgba(118, 118, 128, 0.2);
             }
-        }
-
-        /* Skip link for accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: var(--primary);
-            color: var(--text-on-color);
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            font-weight: 500;
-            transition: top 0.3s var(--ease-default);
-            z-index: 10001;
-        }
-
-        .skip-link:focus {
-            top: 6px;
         }
 
         /* Screen reader only */
@@ -1710,6 +1952,180 @@
             transition: opacity 0.3s var(--ease-default);
         }
 
+        /* ===== TECH QUOTE BANNER ===== */
+        .tech-quote-banner {
+            position: relative;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--surface-secondary);
+            backdrop-filter: blur(var(--blur-lg));
+            border-radius: var(--radius-xl);
+            padding: var(--space-6) var(--space-8);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quote-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .quote-icon {
+            color: var(--primary);
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
+        .quote-text {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-style: italic;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .quote-author {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .quote-refresh {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-default);
+            flex-shrink: 0;
+        }
+
+        .quote-refresh:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quote-refresh:active {
+            transform: rotate(180deg) scale(0.95);
+        }
+
+        /* ===== PARTICLE CURSOR TRAIL ===== */
+        .cursor-particle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            animation: particleFade 0.8s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% {
+                opacity: 0.8;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
+        }
+
+        /* ===== CONFETTI STYLES ===== */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            pointer-events: none;
+            z-index: 10000;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: var(--space-8);
+            right: var(--space-8);
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            z-index: 10001;
+            transform: translateX(400px);
+            transition: transform 0.3s var(--ease-default);
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .toast-message {
+            font-weight: 500;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--surface-tertiary);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.3s var(--ease-default);
+        }
+
         .loading-spinner.visible {
             opacity: 1;
         }
@@ -1727,9 +2143,6 @@
 </head>
 
 <body>
-    <!-- Skip to main content link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
     <!-- Loading Spinner -->
     <div class="loading-spinner" id="loadingSpinner"></div>
 
@@ -1770,6 +2183,7 @@
                 <li><a href="#main-content" class="nav-link" data-section="home">Home</a></li>
                 <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
                 <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+                <li><a href="#github" class="nav-link" data-section="github">GitHub</a></li>
                 <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
             </ul>
 
@@ -1807,6 +2221,7 @@
                 <li><a href="#main-content" class="mobile-nav-link" data-section="home"><span>Home</span></a></li>
                 <li><a href="#skills" class="mobile-nav-link" data-section="skills"><span>Skills</span></a></li>
                 <li><a href="#about" class="mobile-nav-link" data-section="about"><span>About</span></a></li>
+                <li><a href="#github" class="mobile-nav-link" data-section="github"><span>GitHub</span></a></li>
                 <li><a href="#contact" class="mobile-nav-link" data-section="contact"><span>Contact</span></a></li>
             </ul>
         </div>
@@ -1830,13 +2245,30 @@
         </div>
 
         <div class="hero-content">
-            <h1 class="hero-title">Dreamed. Coded. Shipped.</h1>
+            <h1 class="hero-title" id="heroTitle">
+                <span class="typing-text"></span>
+                <span class="typing-cursor">|</span>
+            </h1>
             <p class="hero-subtitle">Crafting exceptional digital experiences with precision, creativity, and
                 cutting-edge technology</p>
             <a href="#contact" class="btn-primary">
                 <i class="fas fa-paper-plane"></i>
                 Let's Create Something Amazing
             </a>
+        </div>
+    </section>
+
+    <!-- Tech Quote Section -->
+    <section style="padding: var(--space-12) var(--space-6); background: var(--surface-primary);">
+        <div class="tech-quote-banner" id="techQuoteBanner">
+            <div class="quote-content">
+                <i class="fas fa-quote-left quote-icon"></i>
+                <p class="quote-text" id="quoteText">Loading inspiring quote...</p>
+                <span class="quote-author" id="quoteAuthor">- Tech Pioneer</span>
+            </div>
+            <button class="quote-refresh" id="quoteRefresh" aria-label="Get new quote" title="New quote">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
     </section>
 
@@ -2005,16 +2437,90 @@
                 <h3 class="profile-name">Raza</h3>
                 <p class="profile-role">Software Engineering Student</p>
                 <div class="social-links">
-                    <a href="#" class="social-link" aria-label="GitHub">
+                    <a href="https://github.com/bsse23029" class="social-link" aria-label="GitHub">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="#" class="social-link" aria-label="LinkedIn">
+                    <a href="https://www.linkedin.com/in/mukarram-raza-4599762ab/" class="social-link" aria-label="LinkedIn">
                         <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="#" class="social-link" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
+                    <a href="https://x.com" class="social-link" aria-label="X (formerly Twitter)">
+                        <i class="fab fa-x-twitter"></i>
                     </a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Activity Section -->
+    <section class="github-activity fade-in" id="github">
+        <div class="github-content">
+            <h2 class="section-title">GitHub Activity</h2>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: var(--space-10); color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
+                Check out my latest contributions and coding activity
+            </p>
+            
+            <!-- GitHub Stats Cards -->
+            <div class="github-stats">
+                <div class="stat-card">
+                    <img id="githubStatsImg" src="https://github-readme-stats.vercel.app/api?username=bsse23029&show_icons=true&theme=transparent&hide_border=true&title_color=007AFF&icon_color=007AFF&text_color=000000&bg_color=00000000" alt="GitHub Stats" loading="lazy">
+                </div>
+                <div class="stat-card">
+                    <img id="githubLangsImg" src="https://github-readme-stats.vercel.app/api/top-langs/?username=bsse23029&layout=compact&theme=transparent&hide_border=true&title_color=007AFF&text_color=000000&bg_color=00000000" alt="Top Languages" loading="lazy">
+                </div>
+            </div>
+
+            <!-- GitHub Profile Summary Cards -->
+            <div class="github-profile-cards" style="margin: var(--space-10) 0;">
+                <h3 style="text-align: center; margin-bottom: var(--space-6); color: var(--text-primary); font-size: 20px;">
+                    <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+                    Profile Overview
+                </h3>
+                <div class="profile-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-6);">
+                    <div class="stat-card">
+                        <img id="githubProfileSummary" src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=bsse23029&theme=github" alt="GitHub Profile Summary" loading="lazy" style="width: 100%; border-radius: var(--radius-md);">
+                    </div>
+                </div>
+                <div class="profile-cards-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); margin-top: var(--space-6);">
+                    <div class="stat-card">
+                        <img id="githubCommitTime" src="https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=bsse23029&theme=github" alt="Productive Time" loading="lazy" style="width: 100%; border-radius: var(--radius-md);">
+                    </div>
+                    <div class="stat-card">
+                        <img id="githubRepoPerLang" src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=bsse23029&theme=github" alt="Repos Per Language" loading="lazy" style="width: 100%; border-radius: var(--radius-md);">
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Contribution Graph -->
+            <div class="contribution-graph">
+                <h3 style="text-align: center; margin-bottom: var(--space-6); color: var(--text-primary); font-size: 20px;">Contribution Graph</h3>
+                <img id="githubContribImg" src="https://ghchart.rshah.org/007AFF/bsse23029" alt="GitHub Contribution Graph" style="width: 100%; max-width: 900px; margin: 0 auto; display: block; border-radius: var(--radius-lg);" loading="lazy">
+            </div>
+
+            <!-- GitHub Streak Stats -->
+            <div class="github-streak">
+                <img id="githubStreakImg" src="https://github-readme-streak-stats.herokuapp.com/?user=bsse23029&theme=transparent&hide_border=true&ring=007AFF&fire=007AFF&currStreakLabel=000000&sideLabels=000000&dates=000000&currStreakNum=007AFF&sideNums=007AFF" alt="GitHub Streak" loading="lazy">
+            </div>
+
+            <!-- Live Commits Feed -->
+            <div class="commits-feed">
+                <h3 style="text-align: center; margin-bottom: var(--space-6); color: var(--text-primary); font-size: 20px; display: flex; align-items: center; justify-content: center; gap: var(--space-2);">
+                    <i class="fas fa-code-branch" style="color: var(--primary);"></i>
+                    Recent Commits
+                </h3>
+                <div id="commitsContainer" class="commits-list">
+                    <div class="loading-commits">
+                        <i class="fas fa-spinner fa-spin" style="color: var(--primary); font-size: 24px;"></i>
+                        <p style="margin-top: var(--space-2); color: var(--text-secondary);">Loading commits...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View on GitHub Button -->
+            <div style="text-align: center; margin-top: var(--space-10);">
+                <a href="https://github.com/bsse23029" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                    <i class="fab fa-github"></i>
+                    View Full Profile on GitHub
+                </a>
             </div>
         </div>
     </section>
@@ -2026,10 +2532,15 @@
             <p class="about-description">
                 Ready to bring your ideas to life? Let's create something extraordinary together.
             </p>
-            <a href="mailto:contact.raza.dev@gmail.com" class="contact-email">
-                <i class="fas fa-envelope"></i>
-                contact.raza.dev@gmail.com
-            </a>
+            <div class="email-container">
+                <a href="mailto:contact.raza.dev@gmail.com" class="contact-email">
+                    <i class="fas fa-envelope"></i>
+                    <span id="emailText">contact.raza.dev@gmail.com</span>
+                </a>
+                <button class="copy-email-btn" id="copyEmailBtn" title="Copy email address">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -2129,6 +2640,58 @@
 
                 // Update CSS custom property for theme detection
                 document.documentElement.style.setProperty('--is-dark', theme === 'dark' ? '1' : '0');
+                
+                // Update GitHub widgets for theme
+                this.updateGitHubWidgets(theme);
+            }
+
+            updateGitHubWidgets(theme) {
+                const isDark = theme === 'dark';
+                const textColor = isDark ? 'FFFFFF' : '000000';
+                const bgColor = isDark ? '1C1C1E' : 'FFFFFF';
+                const chartColor = '007AFF';
+                const cardTheme = isDark ? 'github_dark' : 'github';
+                
+                // Update GitHub Stats
+                const statsImg = document.getElementById('githubStatsImg');
+                if (statsImg) {
+                    statsImg.src = `https://github-readme-stats.vercel.app/api?username=bsse23029&show_icons=true&theme=transparent&hide_border=true&title_color=${chartColor}&icon_color=${chartColor}&text_color=${textColor}&bg_color=00000000`;
+                }
+                
+                // Update Top Languages
+                const langsImg = document.getElementById('githubLangsImg');
+                if (langsImg) {
+                    langsImg.src = `https://github-readme-stats.vercel.app/api/top-langs/?username=bsse23029&layout=compact&theme=transparent&hide_border=true&title_color=${chartColor}&text_color=${textColor}&bg_color=00000000`;
+                }
+                
+                // Update Profile Summary Cards
+                const profileSummary = document.getElementById('githubProfileSummary');
+                if (profileSummary) {
+                    profileSummary.src = `https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=bsse23029&theme=${cardTheme}`;
+                }
+                
+                const commitTime = document.getElementById('githubCommitTime');
+                if (commitTime) {
+                    commitTime.src = `https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=bsse23029&theme=${cardTheme}`;
+                }
+                
+                const repoPerLang = document.getElementById('githubRepoPerLang');
+                if (repoPerLang) {
+                    repoPerLang.src = `https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=bsse23029&theme=${cardTheme}`;
+                }
+                
+                // Update Contribution Graph
+                const contribImg = document.getElementById('githubContribImg');
+                if (contribImg) {
+                    contribImg.src = `https://ghchart.rshah.org/${chartColor}/bsse23029`;
+                }
+                
+                // Update Streak Stats
+                const streakImg = document.getElementById('githubStreakImg');
+                if (streakImg) {
+                    const labelColor = textColor;
+                    streakImg.src = `https://github-readme-streak-stats.herokuapp.com/?user=bsse23029&theme=transparent&hide_border=true&ring=${chartColor}&fire=${chartColor}&currStreakLabel=${labelColor}&sideLabels=${labelColor}&dates=${labelColor}&currStreakNum=${chartColor}&sideNums=${chartColor}`;
+                }
             }
 
             updateThemeIcon() {
@@ -2853,6 +3416,325 @@
             }
         }
 
+        // ===== TECH QUOTE GENERATOR ===== 
+        class TechQuoteGenerator {
+            constructor() {
+                this.quotes = [
+                    { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+                    { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+                    { text: "Experience is the name everyone gives to their mistakes.", author: "Oscar Wilde" },
+                    { text: "In order to be irreplaceable, one must always be different.", author: "Coco Chanel" },
+                    { text: "Java is to JavaScript what car is to Carpet.", author: "Chris Heilmann" },
+                    { text: "Knowledge is power.", author: "Francis Bacon" },
+                    { text: "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday's code.", author: "Dan Salomon" },
+                    { text: "Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away.", author: "Antoine de Saint-Exupery" },
+                    { text: "Ruby is rubbish! PHP is phpantastic!", author: "Nikita Popov" },
+                    { text: "Code never lies, comments sometimes do.", author: "Ron Jeffries" },
+                    { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+                    { text: "Before software can be reusable it first has to be usable.", author: "Ralph Johnson" },
+                    { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+                    { text: "The best error message is the one that never shows up.", author: "Thomas Fuchs" },
+                    { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson" }
+                ];
+                this.quoteText = document.getElementById('quoteText');
+                this.quoteAuthor = document.getElementById('quoteAuthor');
+                this.refreshBtn = document.getElementById('quoteRefresh');
+                this.init();
+            }
+
+            init() {
+                this.showRandomQuote();
+                this.refreshBtn.addEventListener('click', () => this.showRandomQuote());
+            }
+
+            showRandomQuote() {
+                const quote = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+                this.quoteText.textContent = quote.text;
+                this.quoteAuthor.textContent = `— ${quote.author}`;
+            }
+        }
+
+        // ===== TYPING ANIMATION ===== 
+        class TypingAnimation {
+            constructor() {
+                this.textElement = document.querySelector('.typing-text');
+                this.text = "Dreamed. Coded. Shipped.";
+                this.index = 0;
+                this.init();
+            }
+
+            init() {
+                this.type();
+            }
+
+            type() {
+                if (this.index < this.text.length) {
+                    this.textElement.textContent += this.text.charAt(this.index);
+                    this.index++;
+                    setTimeout(() => this.type(), 100);
+                }
+            }
+        }
+
+        // ===== PARTICLE CURSOR TRAIL ===== 
+        class ParticleCursor {
+            constructor() {
+                this.lastTime = 0;
+                this.throttle = 50;
+                this.init();
+            }
+
+            init() {
+                document.addEventListener('mousemove', (e) => {
+                    const now = Date.now();
+                    if (now - this.lastTime < this.throttle) return;
+                    this.lastTime = now;
+                    this.createParticle(e.clientX, e.clientY);
+                });
+            }
+
+            createParticle(x, y) {
+                const particle = document.createElement('div');
+                particle.className = 'cursor-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+                
+                const colors = ['#007AFF', '#5856D6', '#32D74B', '#FF9500'];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        // ===== 3D CARD TILT EFFECT ===== 
+        class Card3DTilt {
+            constructor() {
+                this.cards = document.querySelectorAll('.skill-card');
+                this.init();
+            }
+
+            init() {
+                this.cards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => this.handleMouseMove(e, card));
+                    card.addEventListener('mouseleave', () => this.handleMouseLeave(card));
+                });
+            }
+
+            handleMouseMove(e, card) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+            }
+
+            handleMouseLeave(card) {
+                card.style.transform = '';
+            }
+        }
+
+        // ===== CONFETTI CELEBRATION ===== 
+        class ConfettiCelebration {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                const ctaButton = document.querySelector('.btn-primary');
+                if (ctaButton) {
+                    ctaButton.addEventListener('click', (e) => {
+                        this.celebrate(e);
+                    });
+                }
+            }
+
+            celebrate(e) {
+                const colors = ['#007AFF', '#5856D6', '#32D74B', '#FF9500', '#FF453A'];
+                const rect = e.target.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = x + (Math.random() - 0.5) * 50 + 'px';
+                        confetti.style.top = y + 'px';
+                        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.width = Math.random() * 10 + 5 + 'px';
+                        confetti.style.height = confetti.style.width;
+                        
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => confetti.remove(), 3000);
+                    }, i * 20);
+                }
+            }
+        }
+
+        // ===== GITHUB COMMITS FETCHER ===== 
+        class GitHubCommitsFeed {
+            constructor() {
+                this.username = 'bsse23029';
+                this.container = document.getElementById('commitsContainer');
+                this.init();
+            }
+
+            async init() {
+                await this.fetchCommits();
+            }
+
+            async fetchCommits() {
+                try {
+                    const response = await fetch(`https://api.github.com/users/${this.username}/events/public?per_page=100`);
+                    const events = await response.json();
+                    
+                    const pushEvents = events
+                        .filter(event => event.type === 'PushEvent')
+                        .slice(0, 5);
+                    
+                    this.displayCommits(pushEvents);
+                } catch (error) {
+                    this.container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Unable to load commits. Please check back later.</p>';
+                }
+            }
+
+            displayCommits(events) {
+                if (events.length === 0) {
+                    this.container.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No recent commits found.</p>';
+                    return;
+                }
+
+                const commitsHTML = events.map(event => {
+                    const commit = event.payload.commits[0];
+                    const timeAgo = this.getTimeAgo(new Date(event.created_at));
+                    const sha = event.payload.commits[0].sha.substring(0, 7);
+                    
+                    return `
+                        <div class="commit-item" onclick="window.open('https://github.com/${event.repo.name}', '_blank')">
+                            <div class="commit-header">
+                                <span class="commit-repo">
+                                    <i class="fab fa-github"></i>
+                                    ${event.repo.name.split('/')[1]}
+                                </span>
+                                <span class="commit-time">${timeAgo}</span>
+                            </div>
+                            <div class="commit-message">${commit.message}</div>
+                            <div class="commit-meta">
+                                <span class="commit-sha">${sha}</span>
+                                <span><i class="fas fa-code-branch"></i> ${event.payload.ref.split('/').pop()}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                this.container.innerHTML = commitsHTML;
+            }
+
+            getTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                const intervals = {
+                    year: 31536000,
+                    month: 2592000,
+                    week: 604800,
+                    day: 86400,
+                    hour: 3600,
+                    minute: 60
+                };
+
+                for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+                    const interval = Math.floor(seconds / secondsInUnit);
+                    if (interval >= 1) {
+                        return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+                    }
+                }
+                return 'just now';
+            }
+        }
+
+        // ===== COPY EMAIL FUNCTIONALITY ===== 
+        class CopyEmailButton {
+            constructor() {
+                this.copyBtn = document.getElementById('copyEmailBtn');
+                this.emailText = 'contact.raza.dev@gmail.com';
+                this.init();
+            }
+
+            init() {
+                if (this.copyBtn) {
+                    this.copyBtn.addEventListener('click', () => this.copyEmail());
+                }
+            }
+
+            async copyEmail() {
+                try {
+                    await navigator.clipboard.writeText(this.emailText);
+                    this.showToast('Email copied to clipboard!');
+                    
+                    this.copyBtn.classList.add('copied');
+                    const icon = this.copyBtn.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    
+                    setTimeout(() => {
+                        this.copyBtn.classList.remove('copied');
+                        icon.className = 'fas fa-copy';
+                    }, 2000);
+                } catch (err) {
+                    this.showToast('Failed to copy email', 'error');
+                }
+            }
+
+            showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `
+                    <i class="toast-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                    <span class="toast-message">${message}</span>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.classList.add('show'), 100);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // ===== PARALLAX SCROLLING ===== 
+        class ParallaxEffect {
+            constructor() {
+                this.floatingElements = document.querySelectorAll('.floating-logo, .orb');
+                this.init();
+            }
+
+            init() {
+                window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
+            }
+
+            handleScroll() {
+                const scrolled = window.pageYOffset;
+                
+                this.floatingElements.forEach((el, index) => {
+                    const speed = 0.5 + (index * 0.1);
+                    const yPos = -(scrolled * speed);
+                    el.style.transform = `translateY(${yPos}px)`;
+                });
+            }
+        }
+
         // ===== INITIALIZATION ===== 
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize loading experience first
@@ -2866,6 +3748,16 @@
             const scrollAnimations = new ScrollAnimations();
             const interactions = new EnhancedInteractions();
             const performanceOptimizer = new PerformanceOptimizer();
+
+            // Initialize new features
+            new TechQuoteGenerator();
+            new TypingAnimation();
+            new ParticleCursor();
+            new Card3DTilt();
+            new ConfettiCelebration();
+            new GitHubCommitsFeed();
+            new CopyEmailButton();
+            new ParallaxEffect();
 
             // Initialize smooth scrolling
             initSmoothScrolling();
@@ -2906,6 +3798,10 @@
                             document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
                             break;
                         case '4':
+                            e.preventDefault();
+                            document.querySelector('#github').scrollIntoView({ behavior: 'smooth' });
+                            break;
+                        case '5':
                             e.preventDefault();
                             document.querySelector('#contact').scrollIntoView({ behavior: 'smooth' });
                             break;
