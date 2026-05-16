@@ -1,7 +1,10 @@
+/* Design system — must load first (defines all CSS variables) */
 @import './design-system/variables.css';
 @import './design-system/reset.css';
 @import './design-system/base.css';
 @import './design-system/animations.css';
+
+/* Component styles */
 @import './components/background.css';
 @import './components/navbar.css';
 @import './components/hero.css';
@@ -12,4 +15,6 @@
 @import './components/github.css';
 @import './components/contact.css';
 @import './components/enhanced-animations.css';
+
+/* Responsive & accessibility — must load last (overrides component styles) */
 @import './components/responsive.css';

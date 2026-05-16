@@ -5,7 +5,10 @@
   position: relative;
 }
 
-.github-content { max-width: 1000px; margin: 0 auto; }
+.github-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
 .github-stats {
   display: grid;
@@ -26,8 +29,16 @@
   overflow: hidden;
 }
 
-.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
-.stat-card img { width: 100%; height: auto; display: block; }
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.stat-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 .contribution-graph {
   margin: var(--space-10) 0;
@@ -47,7 +58,10 @@
   box-shadow: var(--shadow-md);
 }
 
-.github-streak img { max-width: 100%; height: auto; }
+.github-streak img {
+  max-width: 100%;
+  height: auto;
+}
 
 .commits-feed {
   margin: var(--space-10) 0;
@@ -57,7 +71,16 @@
   box-shadow: var(--shadow-md);
 }
 
-.commits-list { display: flex; flex-direction: column; gap: var(--space-3); }
+.commits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.loading-commits {
+  text-align: center;
+  padding: var(--space-8);
+}
 
 .commit-item {
   padding: var(--space-4);
@@ -81,9 +104,24 @@
   margin-bottom: var(--space-2);
 }
 
-.commit-repo { font-weight: 600; color: var(--primary); font-size: 14px; }
-.commit-time { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
-.commit-message { color: var(--text-primary); font-size: 14px; line-height: 1.5; margin-bottom: var(--space-2); }
+.commit-repo {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.commit-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+.commit-message {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
 
 .commit-meta {
   display: flex;
@@ -100,8 +138,19 @@
   border-radius: var(--radius-xs);
 }
 
-/* Dark mode adjustments for GitHub widget images */
+/* Dark mode adjustments for GitHub widgets */
 [data-theme="dark"] .stat-card img,
 [data-theme="dark"] .github-streak img {
   filter: brightness(0.9) contrast(1.1);
+}
+
+@media (max-width: 768px) {
+  .github-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .contribution-graph img {
+    width: 100%;
+    overflow-x: auto;
+  }
 }

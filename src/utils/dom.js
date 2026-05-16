@@ -1,33 +1,43 @@
 /**
- * Shorthand querySelector.
+ * Shorthand for `querySelector`.
+ *
  * @param {string} selector
- * @param {Element} [context=document]
+ * @param {Document|Element} root
  * @returns {Element|null}
  */
-export function qs(selector, context = document) {
-  return context.querySelector(selector);
+export function qs(selector, root = document) {
+  return root.querySelector(selector);
 }
 
 /**
- * Shorthand querySelectorAll returning an Array.
+ * Shorthand for `querySelectorAll`, returned as a plain Array.
+ *
  * @param {string} selector
- * @param {Element} [context=document]
+ * @param {Document|Element} root
  * @returns {Element[]}
  */
-export function qsa(selector, context = document) {
-  return Array.from(context.querySelectorAll(selector));
+export function qsAll(selector, root = document) {
+  return [...root.querySelectorAll(selector)];
 }
 
 /**
- * Create an element with optional attributes and inner HTML.
- * @param {string} tag
- * @param {Object} [attrs={}]
- * @param {string} [html='']
+ * Create a DOM element with optional attributes and children.
+ *
+ * @param {string} tag - HTML tag name
+ * @param {Object} attrs - Attribute map. Use `className` for class, `innerHTML` for inner HTML.
+ * @param {Array<Element|string>} children - Child nodes or text strings
  * @returns {Element}
  */
-export function createElement(tag, attrs = {}, html = '') {
+export function createElement(tag, attrs = {}, children = []) {
   const el = document.createElement(tag);
-  Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
-  if (html) el.innerHTML = html;
+  Object.entries(attrs).forEach(([k, v]) => {
+    if (k === "className") el.className = v;
+    else if (k === "innerHTML") el.innerHTML = v;
+    else el.setAttribute(k, v);
+  });
+  children.forEach((child) => {
+    if (typeof child === "string") el.appendChild(document.createTextNode(child));
+    else el.appendChild(child);
+  });
   return el;
 }

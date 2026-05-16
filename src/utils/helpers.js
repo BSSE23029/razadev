@@ -1,5 +1,6 @@
 /**
- * Returns a human-readable "time ago" string from a Date object.
+ * Convert a Date to human-readable relative time ("2 hours ago", "3 days ago").
+ *
  * @param {Date} date
  * @returns {string}
  */
@@ -17,22 +18,42 @@ export function getTimeAgo(date) {
   for (const [unit, secondsInUnit] of Object.entries(intervals)) {
     const interval = Math.floor(seconds / secondsInUnit);
     if (interval >= 1) {
-      return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+      return `${interval} ${unit}${interval > 1 ? "s" : ""} ago`;
     }
   }
-  return 'just now';
+  return "just now";
 }
 
 /**
- * Debounce a function call.
+ * Returns a debounced version of `fn` that delays invocation until after
+ * `delay` ms have elapsed since the last call.
+ *
  * @param {Function} fn
- * @param {number} delay - ms
+ * @param {number} delay - milliseconds
  * @returns {Function}
  */
 export function debounce(fn, delay) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+/**
+ * Returns a throttled version of `fn` that invokes at most once per `limit` ms.
+ *
+ * @param {Function} fn
+ * @param {number} limit - milliseconds
+ * @returns {Function}
+ */
+export function throttle(fn, limit) {
+  let lastCall = 0;
+  return function (...args) {
+    const now = Date.now();
+    if (now - lastCall >= limit) {
+      lastCall = now;
+      return fn.apply(this, args);
+    }
   };
 }

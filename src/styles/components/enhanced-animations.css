@@ -1,4 +1,34 @@
-/* ===== ENHANCED SCROLL ANIMATIONS ===== */
+/* ===== ENHANCED ANIMATIONS: CLASS-BASED ANIMATION RULES =====
+ * Scroll-reveal and entrance animation classes that USE keyframes.
+ * @keyframes definitions belong in design-system/animations.css.
+ * ============================================================ */
+
+/* ----- Hero entrance animations ----- */
+
+.hero-content {
+  animation: heroFadeIn 1.2s var(--ease-smooth) 0.3s both;
+}
+
+.hero-title {
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.typing-cursor {
+  animation: blink 1s step-end infinite;
+  color: var(--primary);
+  margin-left: 2px;
+}
+
+.hero-subtitle {
+  animation: slideUp 0.8s var(--ease-default) 0.6s both;
+}
+
+.btn-primary {
+  animation: buttonFloat 0.8s var(--ease-default) 0.9s both;
+}
+
+/* ----- Scroll-triggered reveal ----- */
+
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
@@ -8,4 +38,125 @@
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ----- Skill card stagger reveal ----- */
+
+.skill-card {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: all 0.6s var(--ease-default);
+}
+
+.skill-card.animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ----- Timeline slide-in reveal ----- */
+
+.timeline-item {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.6s var(--ease-default);
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ----- About section entrance ----- */
+
+.about-text {
+  animation: slideInLeft 0.8s var(--ease-default);
+}
+
+.profile-card {
+  animation: slideInRight 0.8s var(--ease-default);
+}
+
+/* Rotating radial overlay on the profile card */
+.profile-card::before {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-default);
+  animation: rotate 20s linear infinite;
+}
+
+/* ----- Interactive state animations ----- */
+
+.copy-email-btn.copied {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  animation: copySuccess 0.6s var(--ease-bounce);
+}
+
+.toast {
+  transform: translateX(400px);
+  transition: transform 0.3s var(--ease-default);
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-default);
+}
+
+.loading-spinner.visible {
+  opacity: 1;
+}
+
+.theme-transition {
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.6s var(--ease-default);
+}
+
+.theme-transition.active {
+  opacity: 1;
+  transform: scale(3);
+}
+
+/* ----- Particle / effect elements ----- */
+
+.mouse-trail {
+  animation: trailFade 1s ease-out forwards;
+}
+
+.cursor-particle {
+  opacity: 0;
+  animation: particleFade 0.8s ease-out forwards;
+}
+
+.confetti {
+  animation: confettiFall 3s ease-out forwards;
+}
+
+/* ----- Floating logo (parallax-ready, JS-driven transform) ----- */
+
+.floating-logo {
+  transition: all 0.3s var(--ease-default);
+}
+
+/* ----- Contact section ambient pulse ----- */
+
+.contact::before {
+  animation: pulse 4s ease-in-out infinite;
+}
+
+/* ----- Accessibility: honour reduced-motion preference ----- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -63,4 +63,23 @@
   box-shadow: var(--shadow-md);
 }
 
-.quote-refresh:active { transform: rotate(180deg) scale(0.95); }
+.quote-refresh:active {
+  transform: rotate(180deg) scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .tech-quote-banner {
+    padding: var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .quote-text {
+    font-size: 13px;
+  }
+
+  .quote-refresh {
+    width: 32px;
+    height: 32px;
+    align-self: center;
+  }
+}
