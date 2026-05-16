@@ -17,7 +17,7 @@ export class EnhancedInteractions {
     const magneticElements = document.querySelectorAll(
       '.skill-card, .tech-item, .btn-primary, .social-link'
     );
-    magneticElements.forEach((el) => applyMagneticEffect(el));
+    applyMagneticEffect(magneticElements);
   }
 
   _initParallaxScrolling() {

@@ -241,6 +241,8 @@
 .touch-device .contact-email:active {
   transform: scale(0.95);
   transition: transform 0.1s var(--ease-default);
+}
+
 /* Show desktop nav, hide mobile menu button */
 @media (min-width: 768px) {
   .nav-links-desktop { display: flex; }
