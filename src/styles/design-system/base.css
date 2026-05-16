@@ -1,0 +1,95 @@
+/* ===== BASE STYLES ===== */
+body {
+  font-family: var(--font-system);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  position: relative;
+  transition:
+    background-color 0.4s var(--ease-default),
+    color 0.4s var(--ease-default);
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+.section-title {
+  text-align: center;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  margin-bottom: var(--space-16);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Touch device optimizations */
+.touch-device .skill-card:hover,
+.touch-device .tech-item:hover,
+.touch-device .btn-primary:hover {
+  transform: none;
+}
+
+.touch-device .skill-card:active,
+.touch-device .tech-item:active {
+  transform: scale(0.98);
+  transition: transform 0.1s var(--ease-default);
+}
+
+.touch-device .btn-primary:active,
+.touch-device .contact-email:active {
+  transform: scale(0.95);
+  transition: transform 0.1s var(--ease-default);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.menu-button:focus,
+.mobile-nav-close:focus,
+.nav-links-desktop a:focus,
+.mobile-nav-links a:focus,
+.btn-primary:focus,
+.contact-email:focus,
+.social-link:focus,
+.theme-toggle:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-contrast: high) {
+  :root {
+    --primary: #0066cc;
+    --text-secondary: rgba(60, 60, 67, 0.8);
+    --surface-tertiary: rgba(118, 118, 128, 0.2);
+  }
+}

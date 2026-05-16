@@ -1,0 +1,306 @@
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablet and below — 768px */
+@media (max-width: 768px) {
+  .github-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .contribution-graph img {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .tech-quote-banner {
+    padding: var(--space-5) var(--space-5);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .quote-text {
+    font-size: 13px;
+  }
+
+  .quote-refresh {
+    width: 32px;
+    height: 32px;
+    align-self: center;
+  }
+
+  .email-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .contact-email {
+    width: 100%;
+    justify-content: center;
+    font-size: 16px;
+    padding: var(--space-4) var(--space-6);
+  }
+}
+
+/* Desktop nav — show desktop links, hide hamburger */
+@media (min-width: 768px) {
+  .nav-links-desktop {
+    display: flex;
+  }
+
+  .menu-button {
+    display: none;
+  }
+}
+
+/* Mobile layout — up to 767px */
+@media (max-width: 767px) {
+  .navbar {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .logo-image {
+    width: 32px;
+    height: 32px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .hero {
+    padding: var(--space-16) var(--space-5);
+    min-height: 90vh;
+  }
+
+  .hero-title {
+    font-size: clamp(36px, 10vw, 64px);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(16px, 4vw, 20px);
+    margin-bottom: var(--space-8);
+  }
+
+  .btn-primary,
+  .contact-email {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-5) var(--space-6);
+  }
+
+  .skills {
+    padding: var(--space-16) var(--space-5);
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .skill-card {
+    padding: var(--space-6);
+  }
+
+  .about {
+    padding: var(--space-16) var(--space-5);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .profile-card {
+    order: -1;
+    padding: var(--space-8);
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .contact {
+    padding: var(--space-16) var(--space-5);
+  }
+
+  .timeline::before {
+    left: var(--space-3);
+  }
+
+  .timeline-item {
+    padding-left: var(--space-8);
+  }
+
+  .timeline-item::before {
+    left: calc(var(--space-3) - 6px);
+  }
+
+  .mobile-nav {
+    width: 100vw;
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Small mobile — up to 480px */
+@media (max-width: 480px) {
+  .navbar {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .hero {
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .skills,
+  .about,
+  .contact {
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-title {
+    font-size: clamp(28px, 8vw, 44px);
+    margin-bottom: var(--space-12);
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for better accessibility */
+.menu-button:focus,
+.mobile-nav-close:focus,
+.nav-links-desktop a:focus,
+.mobile-nav-links a:focus,
+.btn-primary:focus,
+.contact-email:focus,
+.social-link:focus,
+.theme-toggle:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: #0066cc;
+    --text-secondary: rgba(60, 60, 67, 0.8);
+    --surface-tertiary: rgba(118, 118, 128, 0.2);
+  }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Touch device optimizations */
+.touch-device .skill-card:hover,
+.touch-device .tech-item:hover,
+.touch-device .btn-primary:hover {
+  transform: none;
+}
+
+.touch-device .skill-card:active,
+.touch-device .tech-item:active {
+  transform: scale(0.98);
+  transition: transform 0.1s var(--ease-default);
+}
+
+.touch-device .btn-primary:active,
+.touch-device .contact-email:active {
+  transform: scale(0.95);
+  transition: transform 0.1s var(--ease-default);
+/* Show desktop nav, hide mobile menu button */
+@media (min-width: 768px) {
+  .nav-links-desktop { display: flex; }
+  .menu-button { display: none; }
+}
+
+/* Tablet / mobile */
+@media (max-width: 767px) {
+  .navbar { padding: var(--space-4) var(--space-5); }
+  .logo-image { width: 32px; height: 32px; }
+  .logo-text { font-size: 18px; }
+
+  .hero { padding: var(--space-16) var(--space-5); min-height: 90vh; }
+  .hero-title { font-size: clamp(36px, 10vw, 64px); }
+  .hero-subtitle { font-size: clamp(16px, 4vw, 20px); margin-bottom: var(--space-8); }
+
+  .btn-primary,
+  .contact-email { width: 100%; justify-content: center; padding: var(--space-5) var(--space-6); }
+
+  .skills { padding: var(--space-16) var(--space-5); }
+  .skills-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+  .skill-card { padding: var(--space-6); }
+
+  .about { padding: var(--space-16) var(--space-5); }
+  .about-grid { grid-template-columns: 1fr; gap: var(--space-12); }
+  .profile-card { order: -1; padding: var(--space-8); }
+
+  .tech-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+
+  .contact { padding: var(--space-16) var(--space-5); }
+
+  .timeline::before { left: var(--space-3); }
+  .timeline-item { padding-left: var(--space-8); }
+  .timeline-item::before { left: calc(var(--space-3) - 6px); }
+
+  .mobile-nav { width: 100vw; }
+  .theme-toggle { width: 40px; height: 40px; }
+
+  .github-stats { grid-template-columns: 1fr; }
+  .contribution-graph img { width: 100%; overflow-x: auto; }
+
+  .tech-quote-banner {
+    padding: var(--space-5);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .quote-text { font-size: 13px; }
+  .quote-refresh { width: 32px; height: 32px; align-self: center; }
+
+  .email-container { flex-direction: column; width: 100%; }
+  .contact-email { width: 100%; justify-content: center; font-size: 16px; padding: var(--space-4) var(--space-6); }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .navbar { padding: var(--space-3) var(--space-4); }
+  .hero { padding: var(--space-12) var(--space-4); }
+  .skills, .about, .contact { padding: var(--space-12) var(--space-4); }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-title { font-size: clamp(28px, 8vw, 44px); margin-bottom: var(--space-12); }
+  .skills-grid { grid-template-columns: 1fr; gap: var(--space-5); }
+}

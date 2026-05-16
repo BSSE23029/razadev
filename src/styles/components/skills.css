@@ -1,0 +1,310 @@
+/* ===== SKILLS SECTION ===== */
+
+.skills {
+  padding: var(--space-24) var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/*
+ * .section-title is a shared component used across multiple sections.
+ * The base styles are included here for reference; consider extracting
+ * to a shared typography module if other sections also import this.
+ */
+.section-title {
+  text-align: center;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  margin-bottom: var(--space-16);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+
+.skill-card {
+  background: var(--surface-secondary);
+  backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  padding: var(--space-8);
+  border-radius: var(--radius-2xl);
+  border: 0.5px solid var(--surface-tertiary);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  transition: all 0.6s var(--ease-default);
+}
+
+.skill-card.animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.skill-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 255, 0.05),
+    rgba(88, 86, 214, 0.03)
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-default);
+}
+
+.skill-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--ease-default);
+}
+
+.skill-card:hover::after {
+  transform: translateX(100%);
+}
+
+.skill-card:hover {
+  box-shadow: var(--shadow-2xl);
+  border-color: rgba(0, 122, 255, 0.3);
+}
+
+.skill-card:hover::before {
+  opacity: 1;
+}
+
+.skill-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 255, 0.1),
+    rgba(88, 86, 214, 0.08)
+  );
+  border-radius: var(--radius-xl);
+  transition: all 0.4s var(--ease-bounce);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-icon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--ease-default);
+}
+
+.skill-card:hover .skill-icon::after {
+  transform: translateX(100%);
+}
+
+.skill-icon i,
+.skill-icon svg {
+  font-size: 28px;
+  transition: all 0.3s var(--ease-default);
+  position: relative;
+  z-index: 2;
+}
+
+.skill-card:hover .skill-icon {
+  transform: scale(1.15) rotate(8deg);
+  box-shadow: var(--shadow-xl);
+}
+
+.skill-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  transition: all 0.3s var(--ease-default);
+}
+
+.skill-description {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ===== TECH STACK ===== */
+
+.tech-stack {
+  margin-top: var(--space-16);
+  text-align: center;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--space-6);
+  max-width: 600px;
+  margin: var(--space-8) auto 0;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-lg);
+  transition: all 0.4s var(--ease-default);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  border: 0.5px solid var(--surface-tertiary);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 255, 0.05),
+    rgba(88, 86, 214, 0.03)
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-default);
+}
+
+.tech-item:hover {
+  transform: translateY(-8px) scale(1.1);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(0, 122, 255, 0.2);
+}
+
+.tech-item:hover::before {
+  opacity: 1;
+}
+
+.tech-icon {
+  font-size: 32px;
+  transition: all 0.3s var(--ease-bounce);
+  position: relative;
+  z-index: 2;
+}
+
+.tech-item:hover .tech-icon {
+  transform: scale(1.2) rotate(15deg);
+}
+
+.tech-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s var(--ease-default);
+}
+
+.tech-item:hover .tech-name {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+
+.touch-device .skill-card:hover,
+.touch-device .tech-item:hover {
+  transform: none;
+}
+
+.touch-device .skill-card:active,
+.touch-device .tech-item:active {
+  transform: scale(0.98);
+  transition: transform 0.1s var(--ease-default);
+}
+
+/* ===== RESPONSIVE: 767px ===== */
+
+@media (max-width: 767px) {
+  .skills {
+    padding: var(--space-16) var(--space-5);
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .skill-card {
+    padding: var(--space-6);
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+}
+
+/* ===== RESPONSIVE: 480px ===== */
+
+@media (max-width: 480px) {
+  .skills {
+    padding: var(--space-12) var(--space-4);
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-title {
+    font-size: clamp(28px, 8vw, 44px);
+    margin-bottom: var(--space-12);
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+}
