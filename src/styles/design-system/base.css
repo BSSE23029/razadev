@@ -1,0 +1,20 @@
+/* ===== BASE STYLES ===== */
+
+body {
+  font-family: var(--font-system);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  position: relative;
+  transition:
+    background-color 0.4s var(--ease-default),
+    color 0.4s var(--ease-default);
+}
+
+body.menu-open {
+  overflow: hidden;
+}
