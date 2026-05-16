@@ -1,0 +1,11 @@
+/* ===== ENHANCED SCROLL ANIMATIONS ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s var(--ease-default);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

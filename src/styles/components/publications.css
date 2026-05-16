@@ -1,0 +1,99 @@
+/* ===== PUBLICATIONS SECTION ===== */
+.publications {
+  padding: var(--space-24) var(--space-6);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.publications-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  position: relative;
+}
+
+.publication-card {
+  background: var(--surface-secondary);
+  backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  border: 0.5px solid var(--surface-tertiary);
+  transition: all 0.4s var(--ease-default);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.publication-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(0, 122, 255, 0.3);
+}
+
+.publication-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--primary), var(--secondary));
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-default);
+}
+
+.publication-card:hover::before { opacity: 1; }
+
+.publication-title { font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1.4; }
+.publication-authors { color: var(--text-secondary); font-size: 15px; }
+
+.publication-venue {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: var(--space-1);
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.publication-venue span.venue-name { font-style: italic; }
+
+.publication-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--surface-tertiary);
+}
+
+.publication-metrics {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--text-tertiary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.publication-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s var(--ease-default);
+}
+
+.publication-link:hover { color: var(--primary-dark); gap: var(--space-3); }
+
+.loading-commits {
+  text-align: center;
+  padding: var(--space-8);
+}

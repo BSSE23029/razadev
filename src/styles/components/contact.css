@@ -1,0 +1,104 @@
+/* ===== CONTACT SECTION ===== */
+.contact {
+  padding: var(--space-24) var(--space-6);
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 122, 255, 0.03),
+    rgba(88, 86, 214, 0.02),
+    rgba(50, 215, 75, 0.01)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.contact::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.08), transparent 70%);
+  opacity: 0.5;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.contact-content {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.email-container {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-8);
+  background: var(--primary);
+  color: var(--text-on-color);
+  text-decoration: none;
+  border-radius: var(--radius-2xl);
+  font-weight: 600;
+  font-size: 18px;
+  font-family: var(--font-mono);
+  transition: all 0.3s var(--ease-default);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-email::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--ease-default);
+}
+
+.contact-email:hover {
+  background: var(--primary-dark);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--shadow-2xl);
+}
+
+.contact-email:hover::before { transform: translateX(100%); }
+.contact-email:active { transform: translateY(-2px) scale(1.02); }
+
+.copy-email-btn {
+  width: 56px;
+  height: 56px;
+  background: var(--surface-secondary);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-default);
+  font-size: 18px;
+  box-shadow: var(--shadow-md);
+}
+
+.copy-email-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: var(--shadow-lg);
+}
+
+.copy-email-btn:active { transform: scale(0.95) rotate(0deg); }
+
+.copy-email-btn.copied {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  animation: copySuccess 0.6s var(--ease-bounce);
+}

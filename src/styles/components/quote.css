@@ -1,0 +1,66 @@
+/* ===== TECH QUOTE BANNER ===== */
+.tech-quote-banner {
+  position: relative;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--surface-secondary);
+  backdrop-filter: blur(var(--blur-lg));
+  -webkit-backdrop-filter: blur(var(--blur-lg));
+  border-radius: var(--radius-xl);
+  padding: var(--space-6) var(--space-8);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  border: 1px solid rgba(0, 122, 255, 0.2);
+}
+
+.quote-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.quote-icon {
+  color: var(--primary);
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.quote-text {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.quote-author {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.quote-refresh {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-default);
+  flex-shrink: 0;
+}
+
+.quote-refresh:hover {
+  transform: rotate(180deg) scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.quote-refresh:active { transform: rotate(180deg) scale(0.95); }
