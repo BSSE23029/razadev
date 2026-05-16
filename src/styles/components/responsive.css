@@ -241,4 +241,66 @@
 .touch-device .contact-email:active {
   transform: scale(0.95);
   transition: transform 0.1s var(--ease-default);
+/* Show desktop nav, hide mobile menu button */
+@media (min-width: 768px) {
+  .nav-links-desktop { display: flex; }
+  .menu-button { display: none; }
+}
+
+/* Tablet / mobile */
+@media (max-width: 767px) {
+  .navbar { padding: var(--space-4) var(--space-5); }
+  .logo-image { width: 32px; height: 32px; }
+  .logo-text { font-size: 18px; }
+
+  .hero { padding: var(--space-16) var(--space-5); min-height: 90vh; }
+  .hero-title { font-size: clamp(36px, 10vw, 64px); }
+  .hero-subtitle { font-size: clamp(16px, 4vw, 20px); margin-bottom: var(--space-8); }
+
+  .btn-primary,
+  .contact-email { width: 100%; justify-content: center; padding: var(--space-5) var(--space-6); }
+
+  .skills { padding: var(--space-16) var(--space-5); }
+  .skills-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+  .skill-card { padding: var(--space-6); }
+
+  .about { padding: var(--space-16) var(--space-5); }
+  .about-grid { grid-template-columns: 1fr; gap: var(--space-12); }
+  .profile-card { order: -1; padding: var(--space-8); }
+
+  .tech-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+
+  .contact { padding: var(--space-16) var(--space-5); }
+
+  .timeline::before { left: var(--space-3); }
+  .timeline-item { padding-left: var(--space-8); }
+  .timeline-item::before { left: calc(var(--space-3) - 6px); }
+
+  .mobile-nav { width: 100vw; }
+  .theme-toggle { width: 40px; height: 40px; }
+
+  .github-stats { grid-template-columns: 1fr; }
+  .contribution-graph img { width: 100%; overflow-x: auto; }
+
+  .tech-quote-banner {
+    padding: var(--space-5);
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .quote-text { font-size: 13px; }
+  .quote-refresh { width: 32px; height: 32px; align-self: center; }
+
+  .email-container { flex-direction: column; width: 100%; }
+  .contact-email { width: 100%; justify-content: center; font-size: 16px; padding: var(--space-4) var(--space-6); }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .navbar { padding: var(--space-3) var(--space-4); }
+  .hero { padding: var(--space-12) var(--space-4); }
+  .skills, .about, .contact { padding: var(--space-12) var(--space-4); }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-title { font-size: clamp(28px, 8vw, 44px); margin-bottom: var(--space-12); }
+  .skills-grid { grid-template-columns: 1fr; gap: var(--space-5); }
 }
