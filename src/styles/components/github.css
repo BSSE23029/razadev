@@ -1,0 +1,156 @@
+/* ===== GITHUB ACTIVITY SECTION ===== */
+.github-activity {
+  padding: var(--space-24) var(--space-6);
+  background: var(--surface-primary);
+  position: relative;
+}
+
+.github-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.github-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-10);
+}
+
+.stat-card {
+  background: var(--surface-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s var(--ease-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.stat-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.contribution-graph {
+  margin: var(--space-10) 0;
+  padding: var(--space-6);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.github-streak {
+  display: flex;
+  justify-content: center;
+  margin: var(--space-10) 0;
+  padding: var(--space-4);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.github-streak img {
+  max-width: 100%;
+  height: auto;
+}
+
+.commits-feed {
+  margin: var(--space-10) 0;
+  padding: var(--space-6);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.commits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.loading-commits {
+  text-align: center;
+  padding: var(--space-8);
+}
+
+.commit-item {
+  padding: var(--space-4);
+  background: var(--surface-primary);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--primary);
+  transition: all 0.3s var(--ease-default);
+  cursor: pointer;
+}
+
+.commit-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface-tertiary);
+}
+
+.commit-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.commit-repo {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 14px;
+}
+
+.commit-time {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+.commit-message {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
+
+.commit-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.commit-sha {
+  font-family: var(--font-mono);
+  background: var(--surface-quaternary);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+/* Dark mode adjustments for GitHub widgets */
+[data-theme="dark"] .stat-card img,
+[data-theme="dark"] .github-streak img {
+  filter: brightness(0.9) contrast(1.1);
+}
+
+@media (max-width: 768px) {
+  .github-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .contribution-graph img {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
