@@ -93,7 +93,7 @@ export class Hero {
       document.documentElement.style.setProperty('--ease-swift', 'linear');
       document.documentElement.style.setProperty('--ease-smooth', 'linear');
 
-      document.querySelectorAll('.floating-logo, .orb, .gradient-bg, .liquid-blob').forEach((el) => {
+      document.querySelectorAll('.orb, .gradient-bg, .liquid-blob').forEach((el) => {
         el.style.animation = 'none';
       });
     }
