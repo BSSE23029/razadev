@@ -139,10 +139,6 @@
     width: 100vw;
   }
 
-  .theme-toggle {
-    width: 40px;
-    height: 40px;
-  }
 }
 
 /* Small mobile — up to 480px */
@@ -196,8 +192,7 @@
 .mobile-nav-links a:focus,
 .btn-primary:focus,
 .contact-email:focus,
-.social-link:focus,
-.theme-toggle:focus {
+.social-link:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -279,7 +274,6 @@
   .timeline-item::before { left: calc(var(--space-3) - 6px); }
 
   .mobile-nav { width: 100vw; }
-  .theme-toggle { width: 40px; height: 40px; }
 
   .github-stats { grid-template-columns: 1fr; }
   .contribution-graph img { width: 100%; overflow-x: auto; }

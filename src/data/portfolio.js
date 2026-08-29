@@ -12,12 +12,14 @@ export const portfolio = {
         title: 'Serverless URL Shortener',
         description: 'Authentication, MFA, analytics and optimistic interactions backed by AWS.',
         stack: ['Flutter', 'Dart', 'AWS'],
+        url: 'https://github.com/BSSE23029/aws_url_shortner',
       },
       {
         eyebrow: 'Cross-platform',
         title: 'Multilingual Reader',
         description: 'Audio, localization, bookmarks and vector search across languages.',
         stack: ['Flutter', 'Rust', 'Cloudflare'],
+        url: 'https://github.com/BSSE23029/Quran',
       },
     ],
     signal: [
@@ -28,6 +30,7 @@ export const portfolio = {
         description: 'Layer-by-layer protocol decoding, HTTP inspection, PCAP replay, structured JSONL output, and golden tests.',
         stack: ['Go', 'PCAP', 'TCP/IP'],
         featured: true,
+        url: 'https://github.com/BSSE23029/netscope',
       },
     ],
     core: [
@@ -36,12 +39,14 @@ export const portfolio = {
         title: 'TypeScript Backend',
         description: 'Decorators, controllers, middleware and service-oriented modules.',
         stack: ['TypeScript', 'NestJS', 'Node'],
+        url: 'https://github.com/BSSE23029/ts_server_decorators',
       },
       {
         eyebrow: 'Traceable workflows',
         title: 'Document Agents',
         description: 'Worker processes, Redis, vector retrieval and tracing integrations.',
         stack: ['Python', 'Redis', 'Langfuse'],
+        url: 'https://github.com/BSSE23029/langchain_pdf_tracibility',
       },
     ],
   },

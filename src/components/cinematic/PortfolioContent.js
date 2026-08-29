@@ -12,7 +12,13 @@ function stackList(items = []) {
 }
 
 function projectCard(project) {
-  const article = element('article');
+  const article = project.url ? element('a', 'project-card') : element('article');
+  if (project.url) {
+    article.href = project.url;
+    article.target = '_blank';
+    article.rel = 'noreferrer';
+    article.setAttribute('aria-label', `${project.title} on GitHub`);
+  }
   const heading = element('div');
   heading.append(element('small', '', project.eyebrow), element('h3', '', project.title));
   article.append(heading, element('p', '', project.description), stackList(project.stack));
@@ -20,7 +26,13 @@ function projectCard(project) {
 }
 
 function featuredProject(project) {
-  const article = element('article', 'feature-project');
+  const article = project.url ? element('a', 'feature-project project-card') : element('article', 'feature-project');
+  if (project.url) {
+    article.href = project.url;
+    article.target = '_blank';
+    article.rel = 'noreferrer';
+    article.setAttribute('aria-label', `${project.title} on GitHub`);
+  }
   const heading = element('div', 'feature-project__top');
   heading.append(element('small', '', project.eyebrow), element('span', '', project.meta || ''));
   article.append(heading, element('h3', '', project.title), element('p', '', project.description));

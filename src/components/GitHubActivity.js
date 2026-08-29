@@ -6,7 +6,7 @@ export class GitHubActivity {
     this.username = GITHUB_USERNAME;
     this.container = document.getElementById('commitsContainer');
     this._initCommitsFeed();
-    this._listenForThemeChanges();
+    this._updateWidgets();
   }
 
   async _initCommitsFeed() {
@@ -67,17 +67,10 @@ export class GitHubActivity {
     this.container.innerHTML = commitsHTML;
   }
 
-  _listenForThemeChanges() {
-    window.addEventListener('themechange', (e) => {
-      this._updateWidgetsForTheme(e.detail.theme);
-    });
-  }
-
-  _updateWidgetsForTheme(theme) {
-    const isDark = theme === 'dark';
-    const textColor = isDark ? 'FFFFFF' : '000000';
+  _updateWidgets() {
+    const textColor = 'FFFFFF';
     const chartColor = '007AFF';
-    const cardTheme = isDark ? 'github_dark' : 'github';
+    const cardTheme = 'github_dark';
 
     const statsImg = document.getElementById('githubStatsImg');
     if (statsImg) {

@@ -6,16 +6,15 @@
   <title>Raza — Software Engineer</title><link rel="icon" href="/logos/dark/raza_logo.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script>document.documentElement.dataset.theme=new URLSearchParams(location.search).get('theme')||localStorage.getItem('raza-theme')||'light';</script>
   <script type="module" src="/src/main.js"></script>
 </head><body>
-  <div class="loader" id="loader" role="status" aria-live="polite"><div class="loader__mark" aria-hidden="true"><span></span><span></span><span></span><img class="theme-logo theme-logo--dark" src="/logos/dark/raza_logo_no_bg.png" alt="" /><img class="theme-logo theme-logo--light" src="/logos/light/raza_logo_no_bg.png" alt="" /></div><p>Initializing world <b id="loadPercent">0</b></p></div>
+  <div class="loader" id="loader" role="status" aria-live="polite"><div class="loader__mark" aria-hidden="true"><span></span><span></span><span></span><img class="theme-logo" src="/logos/dark/raza_logo_no_bg.png" alt="" /></div><p>Initializing world <b id="loadPercent">0</b></p></div>
   <canvas class="world" id="world" aria-hidden="true"></canvas><div class="atmosphere" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
 
   <header class="site-header">
-    <a class="wordmark" href="#origin" aria-label="Raza — back to the beginning"><img class="theme-logo theme-logo--dark" src="/logos/dark/raza_logo_no_bg.png" alt="Raza" /><img class="theme-logo theme-logo--light" src="/logos/light/raza_logo_no_bg.png" alt="Raza" /></a>
+    <a class="wordmark" href="#origin" aria-label="Raza — back to the beginning"><img class="theme-logo" src="/logos/dark/raza_logo_no_bg.png" alt="Raza" /></a>
     <nav aria-label="Primary navigation"><a href="#work">Work</a><a href="#profile">Profile</a><a href="#contact">Contact</a></nav>
-    <div class="header-actions"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light theme" title="Switch color theme"><svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg><svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.2A8.5 8.5 0 0 1 8.8 4 8.5 8.5 0 1 0 20 15.2Z"/></svg></button><a class="header-status" href="mailto:contact.raza.dev@gmail.com"><i aria-hidden="true"></i> Available</a></div>
+    <div class="header-actions"><a class="header-status" href="mailto:contact.raza.dev@gmail.com"><i aria-hidden="true"></i> Available</a></div>
   </header>
   <aside class="chapter-nav" aria-label="Journey progress">
     <span class="chapter-nav__line"><i id="chapterProgress"></i></span>

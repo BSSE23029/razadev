@@ -73,8 +73,6 @@ export class Hero {
   _preloadImages() {
     const sources = [
       '/logos/dark/raza_logo_no_bg.png',
-      '/logos/light/raza_logo_no_bg.png',
-      '/logos/light/raza_logo.webp',
       '/logos/dark/raza_logo.webp',
     ];
 

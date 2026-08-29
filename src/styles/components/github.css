@@ -138,9 +138,8 @@
   border-radius: var(--radius-xs);
 }
 
-/* Dark mode adjustments for GitHub widgets */
-[data-theme="dark"] .stat-card img,
-[data-theme="dark"] .github-streak img {
+.stat-card img,
+.github-streak img {
   filter: brightness(0.9) contrast(1.1);
 }
 

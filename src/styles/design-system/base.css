@@ -80,8 +80,7 @@ body.menu-open {
 .mobile-nav-links a:focus,
 .btn-primary:focus,
 .contact-email:focus,
-.social-link:focus,
-.theme-toggle:focus {
+.social-link:focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }

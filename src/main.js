@@ -9,7 +9,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { portfolio } from './data/portfolio.js';
 import { PortfolioContent } from './components/cinematic/PortfolioContent.js';
-import { ThemeController } from './components/cinematic/ThemeController.js';
 import { ChapterController } from './components/cinematic/ChapterController.js';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -29,7 +28,6 @@ class ScrollWorld {
     this.packetStreams = [];
     this._buildRenderer();
     this._buildWorld();
-    this.applyTheme(document.documentElement.dataset.theme || 'dark');
     this._bind();
     this.resize();
     this.render();
@@ -87,46 +85,6 @@ class ScrollWorld {
     ], false, 'catmullrom', 0.45);
     this.camera.position.copy(this.cameraPath.getPoint(0));
     this.camera.lookAt(this.targetPath.getPoint(0));
-  }
-
-  applyTheme(theme) {
-    this.theme = theme;
-    const light = theme === 'light';
-    const background = new THREE.Color(light ? 0xe5ebf4 : 0x02040b);
-    this.scene.background.copy(background);
-    this.scene.fog.color.copy(background);
-    this.scene.fog.density = light ? 0.014 : 0.024;
-    this.renderer.toneMappingExposure = light ? 0.78 : 1.05;
-    this.stars.material.vertexColors = !light;
-    this.stars.material.color.set(light ? 0x46658d : 0xffffff);
-    this.stars.material.opacity = light ? 0.42 : 0.62;
-    this.stars.material.userData.themeBlend = false;
-    this.stars.material.needsUpdate = true;
-    this.world.traverse(object => {
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      materials.filter(Boolean).forEach(material => {
-        if (material.userData.themeBlend === undefined && material.blending === THREE.AdditiveBlending) {
-          material.userData.themeBlend = true;
-          material.userData.themeColor = material.color?.getHex();
-          material.userData.themeOpacity = material.opacity;
-        }
-        if (material.userData.themeBlend) {
-          material.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-          if (material.color && material.userData.themeColor !== undefined) {
-            material.color.setHex(material.userData.themeColor);
-            if (light) material.color.offsetHSL(0, 0, material.vertexColors ? -0.55 : -0.5);
-          }
-          material.opacity = light ? Math.min(1, material.userData.themeOpacity * 1.5) : material.userData.themeOpacity;
-          material.needsUpdate = true;
-        }
-      });
-    });
-    this.key.color.set(light ? 0x167da6 : COLORS.cyan);
-    this.key.intensity = light ? 34 : 48;
-    if (this.bloom) {
-      this.bloom.strength = light ? 0.38 : 0.72;
-      this.bloom.threshold = light ? 0.82 : 0.72;
-    }
   }
 
   material(color, emissive = 0x000000, emissiveIntensity = 0) {
@@ -225,7 +183,6 @@ class ScrollWorld {
     window.addEventListener('resize', () => this.resize());
     window.addEventListener('pointermove', event => { this.pointer.set((event.clientX / innerWidth - .5) * 2, (event.clientY / innerHeight - .5) * -2); }, { passive: true });
     document.addEventListener('visibilitychange', () => { this.hidden = document.hidden; if (!this.hidden) this.clock.getDelta(); });
-    window.addEventListener('themechange', event => this.applyTheme(event.detail.theme));
     ScrollTrigger.create({ trigger: '.journey', start: 'top top', end: 'bottom bottom', scrub: reducedMotion ? false : 1.1, onUpdate: self => { this.scroll.progress = self.progress; document.getElementById('chapterProgress').style.height = `${self.progress * 100}%`; } });
   }
 
@@ -247,7 +204,6 @@ async function boot() {
   const percent = document.getElementById('loadPercent'); let value = 0;
   const progress = setInterval(()=>{value=Math.min(92,value+Math.ceil(Math.random()*11));percent.textContent=value;},90);
   new PortfolioContent(portfolio).render();
-  new ThemeController();
   new ChapterController({ reducedMotion });
   try { new ScrollWorld(document.getElementById('world')); await new Promise(resolve=>setTimeout(resolve,compact?700:1100)); value=100; percent.textContent=value; clearInterval(progress); document.getElementById('loader').classList.add('is-finished'); document.body.classList.add('is-ready'); ScrollTrigger.refresh(); }
   catch(error){ clearInterval(progress); document.getElementById('loader').classList.add('is-finished'); document.body.classList.add('no-webgl'); console.error('WebGL world could not initialize.',error); }
