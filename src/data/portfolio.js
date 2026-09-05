@@ -8,22 +8,37 @@ export const portfolio = {
   projects: {
     surface: [
       {
+        id: 'url-shortener',
         eyebrow: 'Featured build · 2025',
         title: 'Serverless URL Shortener',
         description: 'A cross-platform client with authentication, MFA, dashboards, URL analytics and optimistic UI on a serverless AWS architecture.',
         stack: ['Flutter', 'Dart', 'AWS'],
         url: 'https://github.com/BSSE23029/aws_url_shortner',
+        caseStudy: {
+          label: 'Product systems',
+          problem: 'Link management needs to feel immediate while authentication, MFA and analytics remain dependable underneath.',
+          approach: 'Built the cross-platform Flutter client around authenticated workflows, dashboards, URL analytics and optimistic UI, backed by a serverless AWS architecture.',
+          result: 'A product-shaped surface that keeps the fast interaction in the foreground while the cloud services handle the durable work.',
+        },
       },
       {
+        id: 'multilingual-reading',
         eyebrow: 'Cross-platform',
         title: 'Multilingual Reading & Search',
         description: 'A reading app with audio, bookmarks and localization across 128 languages, with vectorised search powered by Rust.',
         stack: ['Flutter', 'Rust', 'Cloudflare'],
         url: 'https://github.com/BSSE23029/Quran',
+        caseStudy: {
+          label: 'Search + mobile',
+          problem: 'A large multilingual reading experience needs useful discovery without making the interface feel like a database.',
+          approach: 'Combined Flutter for the product surface with audio, bookmarks and localization, then moved vectorised search into Rust-backed infrastructure.',
+          result: 'A reading application spanning 128 languages and 79 reciters, with search designed around the act of reading rather than around raw records.',
+        },
       },
     ],
     signal: [
       {
+        id: 'traffic-dissector',
         eyebrow: 'Network tooling · Go',
         meta: 'TCP/IP',
         title: 'Passive Traffic Dissector',
@@ -31,14 +46,27 @@ export const portfolio = {
         stack: ['Go', 'PCAP', 'TCP/IP'],
         featured: true,
         url: 'https://github.com/BSSE23029/netscope',
+        caseStudy: {
+          label: 'Network tooling',
+          problem: 'Raw packet captures are detailed but difficult to reason about when the useful evidence is spread across multiple protocol layers.',
+          approach: 'Built a passive Go analyzer with layer-by-layer decoding, HTTP inspection, PCAP replay, JSONL output and golden tests.',
+          result: 'A testable path from captured frames to structured evidence that can be inspected, replayed and compared over time.',
+        },
       },
       {
+        id: 'tb-classification',
         eyebrow: 'Medical AI · Research',
         meta: 'IEEE ICIC · 2025',
         title: 'Tuberculosis Classification Pipeline',
         description: 'A reproducible VGG16 transfer-learning pipeline for three-class chest X-ray classification, reporting 98.53% accuracy and 97.54% MCC.',
         stack: ['Python', 'TensorFlow', 'Keras'],
         url: 'https://github.com/BSSE23029/VGG16-Transfer-Learning',
+        caseStudy: {
+          label: 'Applied research',
+          problem: 'Chest X-ray classification needs a reproducible evaluation path, not just a promising model output.',
+          approach: 'Applied VGG16 transfer learning to a three-class classification pipeline with a repeatable training and evaluation workflow.',
+          result: 'The published pipeline reported 98.53% accuracy and 97.54% MCC at IEEE ICIC 2025.',
+        },
       },
     ],
     core: [
