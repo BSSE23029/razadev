@@ -6,7 +6,6 @@ import {
   BufferGeometry,
   CatmullRomCurve3,
   CircleGeometry,
-  Clock,
   Color,
   CylinderGeometry,
   DirectionalLight,
@@ -16,7 +15,6 @@ import {
   Group,
   IcosahedronGeometry,
   InstancedMesh,
-  LineBasicMaterial,
   LineSegments,
   MathUtils,
   Mesh,
@@ -34,6 +32,7 @@ import {
   Scene,
   SphereGeometry,
   TextureLoader,
+  Timer,
   TorusGeometry,
   TubeGeometry,
   Vector2,
@@ -50,6 +49,7 @@ const hardwareConcurrency = navigator.hardwareConcurrency || 8;
 const veryLowPower = saveData || hardwareConcurrency <= 2 || deviceMemory <= 2;
 const lowPower = saveData || hardwareConcurrency <= 4 || deviceMemory <= 4;
 const debug = import.meta.env.DEV && new URLSearchParams(window.location.search).has('sceneDebug');
+const qualityOverride = import.meta.env.DEV ? new URLSearchParams(window.location.search).get('quality') : null;
 
 const COLORS = { cyan: 0x5ce7ff, blue: 0x3977ff, violet: 0x8b5cff, ink: 0x050b18, steel: 0x13213a, white: 0xf0f7ff };
 const QUALITY = veryLowPower
@@ -71,8 +71,8 @@ const QUALITY = veryLowPower
       pixelRatio: compact ? 1.15 : 1.25,
       stars: lowPower ? 420 : 760,
       nodes: lowPower ? 8 : 12,
-      transitStages: lowPower ? 2 : 3,
-      transitPackets: lowPower ? 2 : 3,
+      transitStages: lowPower ? 1 : 2,
+      transitPackets: 1,
       curveSegments: 24,
       roundedSegments: 3,
       maxFps: 30,
@@ -81,20 +81,34 @@ const QUALITY = veryLowPower
   : {
       name: 'high',
       pixelRatio: 1.5,
-      stars: 1400,
+      stars: 900,
       nodes: 12,
-      transitStages: 3,
-      transitPackets: 3,
+      transitStages: 2,
+      transitPackets: 1,
       curveSegments: 36,
       roundedSegments: 4,
       maxFps: 60,
       animate: true,
     };
 
+if (qualityOverride === 'low') Object.assign(QUALITY, {
+  name: 'low', pixelRatio: 1, stars: 240, nodes: 6, transitStages: 1, transitPackets: 1,
+  curveSegments: 18, roundedSegments: 2, maxFps: 24, animate: false,
+});
+if (qualityOverride === 'medium') Object.assign(QUALITY, {
+  name: 'medium', pixelRatio: 1.15, stars: 760, nodes: 12, transitStages: 2, transitPackets: 1,
+  curveSegments: 24, roundedSegments: 3, maxFps: 30, animate: true,
+});
+if (qualityOverride === 'high') Object.assign(QUALITY, {
+  name: 'high', pixelRatio: 1.5, stars: 900, nodes: 12, transitStages: 2, transitPackets: 1,
+  curveSegments: 36, roundedSegments: 4, maxFps: 60, animate: true,
+});
+
 class ScrollWorld {
   constructor(canvas) {
     this.canvas = canvas;
-    this.clock = new Clock();
+    this.clock = new Timer();
+    this.clock.connect(document);
     this.pointer = new Vector2();
     this.pointerEase = new Vector2();
     this.scroll = { progress: 0 };
@@ -113,6 +127,9 @@ class ScrollWorld {
     this.progressIndicator = null;
     this.journeyStart = 0;
     this.scrollRange = 1;
+    this.pathProgress = -1;
+    this.visibilityProgress = -1;
+    this.baseTarget = new Vector3();
     this._buildRenderer();
     this._buildWorld();
     this._bind();
@@ -128,13 +145,13 @@ class ScrollWorld {
 
   _buildRenderer() {
     this.scene = new Scene();
-    this.scene.background = new Color(0x02040b);
-    this.scene.fog = new FogExp2(0x02040b, 0.024);
+    this.scene.background = new Color(0x010208);
+    this.scene.fog = new FogExp2(0x010208, 0.008);
     this.camera = new PerspectiveCamera(compact ? 56 : 48, 1, 0.1, 120);
     this.renderer = new WebGLRenderer({ canvas: this.canvas, antialias: !compact, powerPreference: lowPower ? 'low-power' : 'high-performance' });
     this.renderer.outputColorSpace = SRGBColorSpace;
     this.renderer.toneMapping = ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMappingExposure = 1.28;
     this.renderer.setPixelRatio(this._pixelRatio());
 
   }
@@ -142,17 +159,23 @@ class ScrollWorld {
   _buildWorld() {
     this.world = new Group();
     this.scene.add(this.world);
-    this.scene.add(new AmbientLight(0x637aa8, 0.52));
-    const fill = new DirectionalLight(0x234b88, 0.58);
+    this.scene.add(new AmbientLight(0x91a6cf, 0.78));
+    const fill = new DirectionalLight(0x3f70b5, 0.88);
     fill.position.set(-5, 4, 6);
     this.scene.add(fill);
+    const rim = new DirectionalLight(0x79a2ff, 1.15);
+    rim.position.set(6, 2, -8);
+    this.scene.add(rim);
     this.key = new PointLight(COLORS.cyan, 32, 28, 1.8);
     this.key.position.set(1, 3, 4);
     this.camera.add(this.key);
     this.scene.add(this.camera);
 
     this._createStars();
-    this.originPortal = this._createPortal(new Vector3(4.4, 0.3, 0), 1.65, true);
+    // Keep the brand mark in the open right third so it supports the headline
+    // instead of sitting underneath and competing with the opening copy.
+    const originPosition = compact ? new Vector3(5.7, 0.45, -1.2) : new Vector3(9, 0.35, -0.8);
+    this.originPortal = this._createPortal(originPosition, compact ? 1.28 : 1.65, true);
     this.mobile = this._createMobileWorld();
     this.network = this._createNetworkWorld();
     this.backend = this._createBackendWorld();
@@ -194,7 +217,7 @@ class ScrollWorld {
 
   _logoTexture() {
     if (this.logoTexture) return this.logoTexture;
-    this.logoTexture = new TextureLoader().load('/logos/dark/raza_logo_no_bg.png');
+    this.logoTexture = new TextureLoader().load('/logos/dark/raza_logo_no_bg.webp');
     this.logoTexture.colorSpace = SRGBColorSpace;
     this.logoTexture.anisotropy = Math.min(this.renderer.capabilities.getMaxAnisotropy(), 2);
     return this.logoTexture;
@@ -207,12 +230,12 @@ class ScrollWorld {
     const medallionRadius = radius * 0.58;
     const medallion = new Mesh(
       new CylinderGeometry(medallionRadius, medallionRadius, 0.1, 48),
-      this.material(0x05070a, 0x02050b, 0.1, 0.82, 0.23),
+      this.material(0x182638, 0x041522, 0.24, 0.82, 0.23),
     );
     medallion.rotation.x = Math.PI / 2;
     const topPlate = new Mesh(
       new CylinderGeometry(medallionRadius * 0.96, medallionRadius * 0.96, 0.035, 48),
-      this.material(0x080e17, 0x000000, 0, 0.76, 0.25),
+      this.material(0x273b52, 0x000000, 0, 0.76, 0.25),
     );
     topPlate.rotation.x = Math.PI / 2;
     topPlate.position.z = 0.055;
@@ -251,22 +274,32 @@ class ScrollWorld {
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new BufferAttribute(positions, 3));
     geometry.setAttribute('color', new BufferAttribute(colors, 3));
-    this.stars = new Points(geometry, new PointsMaterial({ size: compact ? 0.03 : 0.04, vertexColors: true, transparent: true, opacity: 0.48, depthWrite: false, blending: AdditiveBlending }));
+    this.stars = new Points(geometry, new PointsMaterial({ size: compact ? 0.03 : 0.04, vertexColors: true, transparent: true, opacity: 0.22, depthWrite: false, blending: AdditiveBlending }));
     this.world.add(this.stars);
   }
 
   _createPortal(position, radius, withLogo) {
     const group = new Group();
     group.position.copy(position);
-    const ring = new Mesh(
+    const ring = withLogo ? null : new Mesh(
       new TorusGeometry(radius, 0.009, 6, 48),
       this.basicMaterial(COLORS.cyan, 0.18, AdditiveBlending, false),
     );
-    ring.rotation.set(0.12, 0.16, 0.04);
-    group.add(ring);
-    const core = new Mesh(new CircleGeometry(radius * 0.72, 48), this.basicMaterial(0x01030a, 0.82));
+    if (ring) {
+      ring.rotation.set(0.12, 0.16, 0.04);
+      group.add(ring);
+    }
+    const core = new Mesh(new CircleGeometry(radius * 0.72, 48), this.basicMaterial(0x071321, 0.94));
     core.position.z = -0.08;
     group.add(core);
+    if (withLogo) {
+      const edge = new Mesh(
+        new TorusGeometry(radius * 0.72, 0.014, 6, 64),
+        this.basicMaterial(COLORS.cyan, 0.38, AdditiveBlending, false),
+      );
+      edge.position.z = -0.035;
+      group.add(edge);
+    }
     const logo = withLogo ? this._createLogoObject(radius) : null;
     if (logo) group.add(logo);
     group.userData = { ring, core, logo, speed: 0.07 + Math.random() * 0.02 };
@@ -284,11 +317,11 @@ class ScrollWorld {
     group.position.set(3.8, -0.1, -11.5);
     group.rotation.set(-0.18, -0.5, -0.08);
     group.userData.baseY = -0.1;
-    group.add(new Mesh(this._rounded(3, 5.7, 0.48, 0.25), this.material(0x05070c, 0x000000, 0, 0.78, 0.25)));
-    const frame = new Mesh(this._rounded(2.78, 5.46, 0.08, 0.2), this.material(0x0b111c, 0x000000, 0, 0.72, 0.22));
+    group.add(new Mesh(this._rounded(3, 5.7, 0.48, 0.25), this.material(0x16283c, 0x041522, 0.2, 0.78, 0.25)));
+    const frame = new Mesh(this._rounded(2.78, 5.46, 0.08, 0.2), this.material(0x2a4058, 0x000000, 0, 0.72, 0.22));
     frame.position.z = 0.25;
     group.add(frame);
-    const screen = new Mesh(this._rounded(2.62, 5.28, 0.045, 0.17), this.material(0x02050b, 0x06152a, 0.26, 0.4, 0.18));
+    const screen = new Mesh(this._rounded(2.62, 5.28, 0.045, 0.17), this.material(0x0b2137, 0x0c3b60, 0.52, 0.4, 0.18));
     screen.position.z = 0.31;
     group.add(screen);
     const cameraIsland = new Mesh(this._rounded(0.54, 0.2, 0.06, 0.08), this.material(0x050a13));
@@ -297,7 +330,7 @@ class ScrollWorld {
     const lens = new Mesh(new SphereGeometry(0.042, 6, 6), this.basicMaterial(COLORS.cyan, 0.68));
     lens.position.set(0.27, 2.24, 0.4);
     group.add(lens);
-    const sideButton = new Mesh(this._rounded(0.08, 0.62, 0.12, 0.04), this.material(0x17243a));
+    const sideButton = new Mesh(this._rounded(0.08, 0.62, 0.12, 0.04), this.material(0x35506a));
     sideButton.position.set(-1.54, 0.78, 0.02);
     group.add(sideButton);
     const top = new Mesh(this._rounded(1.28, 0.12, 0.025, 0.04), this.material(0x123253, COLORS.blue, 0.22));
@@ -330,10 +363,10 @@ class ScrollWorld {
     group.position.set(-3, 0, -23);
     const nodes = [];
     const nodeCount = this.quality.nodes;
-    const nodeGeometry = new IcosahedronGeometry(0.075, 0);
-    const hubGeometry = new IcosahedronGeometry(0.17, 0);
+    const nodeGeometry = new IcosahedronGeometry(0.105, 0);
+    const hubGeometry = new IcosahedronGeometry(0.22, 0);
     const nodeMesh = new InstancedMesh(nodeGeometry, this.material(COLORS.cyan, COLORS.cyan, 1.8, 0.64, 0.28), nodeCount);
-    const hubMesh = new InstancedMesh(hubGeometry, this.material(COLORS.violet, COLORS.violet, 1.8, 0.64, 0.28), nodeCount);
+    const hubMesh = new InstancedMesh(hubGeometry, this.material(COLORS.violet, COLORS.violet, 1.8, 0.64, 0.28), 2);
     nodeMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     hubMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     const dummy = new Object3D();
@@ -369,22 +402,16 @@ class ScrollWorld {
       const b = nodes[i].position;
       linePositions.push(a.x, a.y, a.z, b.x, b.y, b.z);
     }
-    for (let i = 0; i < nodes.length; i += 3) {
-      const node = nodes[i].position;
-      linePositions.push(0, 0, 0, node.x, node.y, node.z);
-    }
     const geometry = new BufferGeometry();
     geometry.setAttribute('position', new Float32BufferAttribute(linePositions, 3));
-    group.add(new LineSegments(geometry, this.basicMaterial(COLORS.blue, 0.22, AdditiveBlending, false)));
+    group.add(new LineSegments(geometry, this.basicMaterial(COLORS.blue, 0.3, AdditiveBlending, false)));
 
     const hub = new Group();
-    const hubCore = new Mesh(new OctahedronGeometry(0.48, 0), this.material(0x071225, COLORS.violet, 1.1, 0.72, 0.24));
-    const hubRing = new Mesh(new TorusGeometry(0.8, 0.014, 6, 36), this.basicMaterial(COLORS.violet, 0.42, AdditiveBlending, false));
-    hubRing.rotation.x = Math.PI / 2;
-    hub.add(hubCore, hubRing);
+    const hubCore = new Mesh(new OctahedronGeometry(0.58, 0), this.material(0x10214a, COLORS.violet, 1.08, 0.72, 0.24));
+    hub.add(hubCore);
     group.add(hub);
     const route = new CatmullRomCurve3(nodes.filter((_, i) => i % 3 === 0).map(node => node.position));
-    this._createPackets(group, route, this.quality.transitPackets + 3);
+    this._createPackets(group, route, 1);
     group.userData = { nodes, nodeMesh, hubMesh, dummy, hub };
     this.animated.push(group);
     this.world.add(group);
@@ -395,9 +422,9 @@ class ScrollWorld {
     const group = new Group();
     group.position.set(3.2, -0.3, -35);
     group.rotation.y = -0.28;
-    const rack = new Mesh(this._rounded(3.7, 4.35, 1.02, 0.14), this.material(0x05070c, 0x000000, 0, 0.8, 0.24));
+    const rack = new Mesh(this._rounded(3.7, 4.35, 1.02, 0.14), this.material(0x17283b, 0x041522, 0.18, 0.8, 0.24));
     group.add(rack);
-    const inset = new Mesh(this._rounded(3.36, 4.02, 0.06, 0.08), this.material(0x0b1526, 0x000000, 0, 0.72, 0.22));
+    const inset = new Mesh(this._rounded(3.36, 4.02, 0.06, 0.08), this.material(0x2a4058, 0x03101b, 0.16, 0.72, 0.22));
     inset.position.z = 0.54;
     group.add(inset);
     const sideRail = this.material(0x17243a);
@@ -412,10 +439,10 @@ class ScrollWorld {
     const dummy = new Object3D();
     for (let i = 0; i < 5; i += 1) {
       const row = new Group();
-      const chassis = new Mesh(this._rounded(2.72, 0.52, 0.08, 0.05), this.material(i === 2 ? 0x102947 : 0x0d1c31));
+      const chassis = new Mesh(this._rounded(2.72, 0.52, 0.08, 0.05), this.material(i === 2 ? 0x2c5378 : 0x28445f));
       chassis.position.z = 0.58;
       row.add(chassis);
-      const vent = new Mesh(new PlaneGeometry(1.1, 0.05), this.material(0x243b59));
+      const vent = new Mesh(new PlaneGeometry(1.1, 0.05), this.material(0x46637e));
       vent.position.set(-0.55, 0, 0.63);
       row.add(vent);
       const leds = new InstancedMesh(ledGeometry, ledMaterial, 3);
@@ -475,7 +502,7 @@ class ScrollWorld {
       ]);
       const tube = new Mesh(
         new TubeGeometry(curve, this.quality.curveSegments, 0.009, 5, false),
-        this.basicMaterial(stage % 2 ? COLORS.violet : COLORS.blue, 0.1, AdditiveBlending, false),
+        this.basicMaterial(stage % 2 ? COLORS.violet : COLORS.blue, 0.22, AdditiveBlending, false),
       );
       this.transit.add(tube);
       this._createPackets(this.transit, curve, this.quality.transitPackets);
@@ -496,7 +523,7 @@ class ScrollWorld {
         this.renderer.setAnimationLoop(null);
         return;
       }
-      this.clock.start();
+      this.clock.reset();
       if (this.quality.animate && !this.motionReduced && !this.paused) this.renderer.setAnimationLoop(this.render);
       this.renderFrame();
     });
@@ -569,6 +596,8 @@ class ScrollWorld {
   }
 
   _updateAssetVisibility(progress) {
+    if (progress === this.visibilityProgress) return;
+    this.visibilityProgress = progress;
     [
       [this.originPortal, 0, 0.24],
       [this.mobile, 0.12, 0.5],
@@ -621,6 +650,7 @@ class ScrollWorld {
     materials.forEach(material => material.dispose());
     textures.forEach(texture => texture.dispose());
     this.logoTexture?.dispose();
+    this.clock.dispose();
     this.renderer.renderLists?.dispose();
     this.renderer.dispose();
     if (debug && window.__RAZA_SCENE__ === this) delete window.__RAZA_SCENE__;
@@ -630,16 +660,27 @@ class ScrollWorld {
     if (this.hidden) return;
     if (fromAnimationLoop && this.quality.maxFps < 60 && time - this.lastAnimationRender < 1000 / this.quality.maxFps) return;
     if (fromAnimationLoop) this.lastAnimationRender = time;
+    this.clock.update(time);
     const frameStart = debug ? performance.now() : 0;
-    const elapsed = this.quality.animate && !this.motionReduced ? this.clock.getElapsedTime() : 0;
-    this.pointerEase.lerp(this.pointer, 0.035);
+    const elapsed = this.quality.animate && !this.motionReduced ? this.clock.getElapsed() : 0;
     const progress = MathUtils.clamp(this.scroll.progress, 0, 1);
+    const pathChanged = progress !== this.pathProgress;
+    if (pathChanged) {
+      this.pathProgress = progress;
+      this.cameraPath.getPoint(progress, this.camera.position);
+      this.targetPath.getPoint(progress, this.baseTarget);
+    }
+    const previousPointerX = this.pointerEase.x;
+    const previousPointerY = this.pointerEase.y;
+    this.pointerEase.lerp(this.pointer, 0.035);
+    const pointerChanged = Math.abs(previousPointerX - this.pointerEase.x) > 0.0001 || Math.abs(previousPointerY - this.pointerEase.y) > 0.0001;
     this._updateAssetVisibility(progress);
-    this.cameraPath.getPoint(progress, this.camera.position);
-    this.targetPath.getPoint(progress, this.pathTarget);
-    this.pathTarget.x += this.pointerEase.x * 0.22;
-    this.pathTarget.y += this.pointerEase.y * 0.16;
-    this.camera.lookAt(this.pathTarget);
+    if (pathChanged || pointerChanged) {
+      this.pathTarget.copy(this.baseTarget);
+      this.pathTarget.x += this.pointerEase.x * 0.22;
+      this.pathTarget.y += this.pointerEase.y * 0.16;
+      this.camera.lookAt(this.pathTarget);
+    }
     this.stars.rotation.z = elapsed * 0.0014;
     this.stars.position.x = this.pointerEase.x * -0.35;
     if (this.quality.animate && !this.motionReduced) {
@@ -649,10 +690,10 @@ class ScrollWorld {
           object.userData.ring.rotation.z = elapsed * object.userData.speed;
           object.userData.ring.rotation.x = 0.12 + Math.sin(elapsed * 0.12) * 0.012;
           object.userData.core.rotation.z = elapsed * 0.02;
-          if (object.userData.logo) {
-            object.userData.logo.rotation.y = -0.08 + Math.sin(elapsed * 0.2) * 0.06;
-            object.userData.logo.position.y = Math.sin(elapsed * 0.38) * 0.025;
-          }
+        } else if (object.userData.logo) {
+          object.userData.logo.rotation.y = -0.08 + Math.sin(elapsed * 0.2) * 0.06;
+          object.userData.logo.position.y = Math.sin(elapsed * 0.38) * 0.025;
+          object.userData.core.rotation.z = elapsed * 0.02;
         } else {
           object.rotation.z = Math.sin(elapsed * 0.22 + index) * 0.0015;
         }
