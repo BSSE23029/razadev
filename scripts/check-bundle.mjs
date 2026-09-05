@@ -14,7 +14,7 @@ const budgets = [
   { label: 'initial JS', pattern: /^main-[^/]+\.js$/, limit: 20 * 1024 },
   { label: 'initial CSS', pattern: /^main-[^/]+\.css$/, limit: 9 * 1024 },
   { label: 'deferred 3D JS', pattern: /^ScrollWorld-[^/]+\.js$/, limit: 160 * 1024 },
-  { label: 'logo texture', pattern: /^raza_logo_no_bg-[^/]+\.webp$/, limit: 50 * 1024 },
+  { label: 'logo texture', pattern: /^raza_logo_ui-[^/]+\.webp$/, limit: 24 * 1024 },
 ];
 
 let failed = false;

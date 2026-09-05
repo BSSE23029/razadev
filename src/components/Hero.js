@@ -72,7 +72,7 @@ export class Hero {
   // ===== Preload critical images =====
   _preloadImages() {
     const sources = [
-      '/logos/dark/raza_logo_no_bg.webp',
+      '/logos/dark/raza_logo_ui.webp',
       '/logos/dark/raza_logo.webp',
     ];
 

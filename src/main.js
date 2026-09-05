@@ -8,19 +8,23 @@ const skipScene = reducedMotion
   || Boolean(navigator.connection?.saveData)
   || navigator.hardwareConcurrency <= 2
   || navigator.deviceMemory <= 2;
-async function boot() {
-  new PortfolioContent(portfolio).render();
-  new ChapterController({ reducedMotion });
 
+const revealLoader = () => {
   requestAnimationFrame(() => {
     document.getElementById('loader').classList.add('is-finished');
     document.body.classList.add('is-ready');
   });
+};
+
+async function boot() {
+  new PortfolioContent(portfolio).render();
+  new ChapterController({ reducedMotion });
 
   try {
     if (skipScene) {
       document.body.classList.add('no-webgl');
       document.getElementById('sceneControl')?.setAttribute('hidden', '');
+      revealLoader();
       return;
     }
     const idle = 'requestIdleCallback' in window
@@ -29,9 +33,11 @@ async function boot() {
     await idle;
     const { ScrollWorld } = await import('./components/cinematic/ScrollWorld.js');
     new ScrollWorld(document.getElementById('world'));
+    revealLoader();
   } catch(error) {
     document.body.classList.add('no-webgl');
     document.getElementById('sceneControl')?.setAttribute('hidden', '');
+    revealLoader();
     console.error('WebGL world could not initialize.',error);
   }
 }

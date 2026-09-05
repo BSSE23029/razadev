@@ -163,10 +163,13 @@ class ScrollWorld {
     const fill = new DirectionalLight(0x3f70b5, 0.88);
     fill.position.set(-5, 4, 6);
     this.scene.add(fill);
+    const front = new DirectionalLight(0xa9caff, 0.72);
+    front.position.set(0, 1, 10);
+    this.scene.add(front);
     const rim = new DirectionalLight(0x79a2ff, 1.15);
     rim.position.set(6, 2, -8);
     this.scene.add(rim);
-    this.key = new PointLight(COLORS.cyan, 32, 28, 1.8);
+    this.key = new PointLight(COLORS.cyan, 40, 34, 1.8);
     this.key.position.set(1, 3, 4);
     this.camera.add(this.key);
     this.scene.add(this.camera);
@@ -174,7 +177,7 @@ class ScrollWorld {
     this._createStars();
     // Keep the brand mark in the open right third so it supports the headline
     // instead of sitting underneath and competing with the opening copy.
-    const originPosition = compact ? new Vector3(5.7, 0.45, -1.2) : new Vector3(9, 0.35, -0.8);
+    const originPosition = compact ? new Vector3(5.7, 0.45, -1.2) : new Vector3(11.3, 1.85, -0.8);
     this.originPortal = this._createPortal(originPosition, compact ? 1.28 : 1.65, true);
     this.mobile = this._createMobileWorld();
     this.network = this._createNetworkWorld();
@@ -217,7 +220,7 @@ class ScrollWorld {
 
   _logoTexture() {
     if (this.logoTexture) return this.logoTexture;
-    this.logoTexture = new TextureLoader().load('/logos/dark/raza_logo_no_bg.webp');
+    this.logoTexture = new TextureLoader().load('/logos/dark/raza_logo_ui.webp');
     this.logoTexture.colorSpace = SRGBColorSpace;
     this.logoTexture.anisotropy = Math.min(this.renderer.capabilities.getMaxAnisotropy(), 2);
     return this.logoTexture;
@@ -230,12 +233,12 @@ class ScrollWorld {
     const medallionRadius = radius * 0.58;
     const medallion = new Mesh(
       new CylinderGeometry(medallionRadius, medallionRadius, 0.1, 48),
-      this.material(0x182638, 0x041522, 0.24, 0.82, 0.23),
+      this.material(0x142a43, 0x041522, 0.24, 0.58, 0.3),
     );
     medallion.rotation.x = Math.PI / 2;
     const topPlate = new Mesh(
       new CylinderGeometry(medallionRadius * 0.96, medallionRadius * 0.96, 0.035, 48),
-      this.material(0x273b52, 0x000000, 0, 0.76, 0.25),
+      this.material(0x2f4d6b, 0x000000, 0, 0.52, 0.3),
     );
     topPlate.rotation.x = Math.PI / 2;
     topPlate.position.z = 0.055;
@@ -317,11 +320,15 @@ class ScrollWorld {
     group.position.set(3.8, -0.1, -11.5);
     group.rotation.set(-0.18, -0.5, -0.08);
     group.userData.baseY = -0.1;
-    group.add(new Mesh(this._rounded(3, 5.7, 0.48, 0.25), this.material(0x16283c, 0x041522, 0.2, 0.78, 0.25)));
-    const frame = new Mesh(this._rounded(2.78, 5.46, 0.08, 0.2), this.material(0x2a4058, 0x000000, 0, 0.72, 0.22));
+    group.userData.baseX = 3.8;
+    group.userData.baseZ = -11.5;
+    group.userData.baseRotationZ = -0.08;
+    group.userData.revealY = -0.1;
+    group.add(new Mesh(this._rounded(3, 5.7, 0.48, 0.25), this.material(0x17314d, 0x041522, 0.2, 0.5, 0.31)));
+    const frame = new Mesh(this._rounded(2.78, 5.46, 0.08, 0.2), this.material(0x345574, 0x000000, 0, 0.48, 0.3));
     frame.position.z = 0.25;
     group.add(frame);
-    const screen = new Mesh(this._rounded(2.62, 5.28, 0.045, 0.17), this.material(0x0b2137, 0x0c3b60, 0.52, 0.4, 0.18));
+    const screen = new Mesh(this._rounded(2.62, 5.28, 0.045, 0.17), this.material(0x0d3150, 0x0f5f8f, 0.38, 0.25, 0.22));
     screen.position.z = 0.31;
     group.add(screen);
     const cameraIsland = new Mesh(this._rounded(0.54, 0.2, 0.06, 0.08), this.material(0x050a13));
@@ -365,8 +372,8 @@ class ScrollWorld {
     const nodeCount = this.quality.nodes;
     const nodeGeometry = new IcosahedronGeometry(0.105, 0);
     const hubGeometry = new IcosahedronGeometry(0.22, 0);
-    const nodeMesh = new InstancedMesh(nodeGeometry, this.material(COLORS.cyan, COLORS.cyan, 1.8, 0.64, 0.28), nodeCount);
-    const hubMesh = new InstancedMesh(hubGeometry, this.material(COLORS.violet, COLORS.violet, 1.8, 0.64, 0.28), 2);
+    const nodeMesh = new InstancedMesh(nodeGeometry, this.material(COLORS.cyan, COLORS.cyan, 1.8, 0.35, 0.32), nodeCount);
+    const hubMesh = new InstancedMesh(hubGeometry, this.material(COLORS.violet, COLORS.violet, 1.8, 0.35, 0.32), 2);
     nodeMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     hubMesh.instanceMatrix.setUsage(DynamicDrawUsage);
     const dummy = new Object3D();
@@ -422,9 +429,9 @@ class ScrollWorld {
     const group = new Group();
     group.position.set(3.2, -0.3, -35);
     group.rotation.y = -0.28;
-    const rack = new Mesh(this._rounded(3.7, 4.35, 1.02, 0.14), this.material(0x17283b, 0x041522, 0.18, 0.8, 0.24));
+    const rack = new Mesh(this._rounded(3.7, 4.35, 1.02, 0.14), this.material(0x17324e, 0x041522, 0.18, 0.52, 0.3));
     group.add(rack);
-    const inset = new Mesh(this._rounded(3.36, 4.02, 0.06, 0.08), this.material(0x2a4058, 0x03101b, 0.16, 0.72, 0.22));
+    const inset = new Mesh(this._rounded(3.36, 4.02, 0.06, 0.08), this.material(0x365a79, 0x03101b, 0.16, 0.46, 0.3));
     inset.position.z = 0.54;
     group.add(inset);
     const sideRail = this.material(0x17243a);
@@ -439,7 +446,7 @@ class ScrollWorld {
     const dummy = new Object3D();
     for (let i = 0; i < 5; i += 1) {
       const row = new Group();
-      const chassis = new Mesh(this._rounded(2.72, 0.52, 0.08, 0.05), this.material(i === 2 ? 0x2c5378 : 0x28445f));
+      const chassis = new Mesh(this._rounded(2.72, 0.52, 0.08, 0.05), this.material(i === 2 ? 0x3c79a3 : 0x315775, 0x06172a, i === 2 ? 0.12 : 0, 0.42, 0.32));
       chassis.position.z = 0.58;
       row.add(chassis);
       const vent = new Mesh(new PlaneGeometry(1.1, 0.05), this.material(0x46637e));
@@ -600,11 +607,17 @@ class ScrollWorld {
     this.visibilityProgress = progress;
     [
       [this.originPortal, 0, 0.24],
-      [this.mobile, 0.12, 0.5],
       [this.network, 0.34, 0.7],
       [this.backend, 0.54, 0.9],
       [this.returnPortal, 0.78, 1],
     ].forEach(([asset, start, end]) => { asset.visible = progress >= start && progress <= end; });
+    const mobileReveal = MathUtils.smoothstep(progress, 0.04, 0.2);
+    this.mobile.visible = progress <= 0.56;
+    this.mobile.position.x = this.mobile.userData.baseX + (1 - mobileReveal) * 2.7;
+    this.mobile.position.z = this.mobile.userData.baseZ - (1 - mobileReveal) * 7;
+    this.mobile.userData.revealY = this.mobile.userData.baseY + (1 - mobileReveal) * 1.5;
+    this.mobile.scale.setScalar(0.78 + mobileReveal * 0.22);
+    this.mobile.rotation.z = this.mobile.userData.baseRotationZ + (1 - mobileReveal) * 0.18;
     this.transit.visible = progress >= 0.08 && progress <= 0.92;
   }
 
@@ -698,7 +711,7 @@ class ScrollWorld {
           object.rotation.z = Math.sin(elapsed * 0.22 + index) * 0.0015;
         }
       });
-      if (this.mobile.visible) this.mobile.position.y = this.mobile.userData.baseY + Math.sin(elapsed * 0.48) * 0.07;
+      if (this.mobile.visible) this.mobile.position.y = this.mobile.userData.revealY + Math.sin(elapsed * 0.48) * 0.07;
       if (this.network.visible) {
         this.network.rotation.y = elapsed * 0.022;
         const { nodes, nodeMesh, hubMesh, dummy } = this.network.userData;
