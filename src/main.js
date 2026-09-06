@@ -4,10 +4,22 @@ import { PortfolioContent } from './components/cinematic/PortfolioContent.js';
 import { ChapterController } from './components/cinematic/ChapterController.js';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canCreateWebGL = () => {
+  try {
+    const probe = document.createElement('canvas');
+    const context = probe.getContext('webgl2') || probe.getContext('webgl');
+    context?.getExtension('WEBGL_lose_context')?.loseContext();
+    return Boolean(context);
+  } catch {
+    return false;
+  }
+};
+
 const skipScene = reducedMotion
   || Boolean(navigator.connection?.saveData)
   || navigator.hardwareConcurrency <= 2
-  || navigator.deviceMemory <= 2;
+  || navigator.deviceMemory <= 2
+  || !canCreateWebGL();
 
 const revealLoader = () => {
   requestAnimationFrame(() => {
@@ -16,7 +28,16 @@ const revealLoader = () => {
   });
 };
 
+const primeLogoDecode = () => {
+  document.querySelectorAll('img.theme-logo').forEach(image => {
+    const decode = () => Promise.resolve(image.decode?.()).catch(() => {});
+    if (image.complete) decode();
+    else image.addEventListener('load', decode, { once: true });
+  });
+};
+
 async function boot() {
+  primeLogoDecode();
   new PortfolioContent(portfolio).render();
   new ChapterController({ reducedMotion });
 

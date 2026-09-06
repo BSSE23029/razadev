@@ -54,6 +54,21 @@ export const portfolio = {
         },
       },
       {
+        id: 'chess-go',
+        eyebrow: 'Systems + terminal UI · Go',
+        meta: 'Rules · Engine · Network',
+        title: 'Chess-Go',
+        description: 'A dependency-light Go chess toolkit combining a rules-first library, classical alpha-beta search, a responsive terminal UI, versioned network matches and deterministic tournaments.',
+        stack: ['Go', 'Alpha-beta', 'HTTP/WebSocket', 'TUI'],
+        url: 'https://github.com/bsse23029/chess-go',
+        caseStudy: {
+          label: 'Systems + game tooling',
+          problem: 'A chess product becomes difficult to evolve when rules, search, terminal presentation and network state are tightly coupled.',
+          approach: 'Kept the rules library independent from the CLI and transport layers, then added FEN/SAN/UCI/PGN support, Zobrist hashing, iterative alpha-beta search, a responsive TUI, versioned JSON/HTTP/WebSocket matches, LAN discovery and deterministic tournaments.',
+          result: 'One Go checkout supports reusable rules and engine APIs, local human-or-bot play, reconnectable match prototypes and reproducible verification through tests, perft and benchmarks.',
+        },
+      },
+      {
         id: 'tb-classification',
         eyebrow: 'Medical AI · Research',
         meta: 'IEEE ICIC · 2025',
@@ -111,14 +126,41 @@ export const portfolio = {
   ],
 
   profileFacts: [
-    { label: 'Scale shipped', value: '50K+ lines', detail: 'Production mobile codebase' },
+    { label: 'Scale shipped', value: '50 KSLOC', detail: 'Production mobile codebase' },
     { label: 'Education', value: 'BS Software Engineering', detail: '2023 — Present' },
-    { label: 'GitHub', value: '93 public repos', detail: 'BSSE23029 profile', url: 'https://github.com/BSSE23029' },
+    { label: 'GitHub', value: 'Public profile', detail: 'BSSE23029 profile', url: 'https://github.com/BSSE23029' },
     {
       label: 'Research',
       value: 'IEEE ICIC · 2025',
       detail: 'Published paper ↗',
       url: 'https://doi.org/10.1109/ICIC68258.2025.11413008',
+    },
+  ],
+
+  githubBuilds: [
+    {
+      period: 'Current build',
+      title: 'Chess-Go',
+      detail: 'Rules-first Go library, classical engine, terminal UI and versioned network matches.',
+      url: 'https://github.com/bsse23029/chess-go',
+    },
+    {
+      period: 'Systems',
+      title: 'Portunus P2P Engine',
+      detail: 'Rust peer-to-peer engine for binary networking, service discovery and async storage.',
+      url: 'https://github.com/BSSE23029/portunus',
+    },
+    {
+      period: 'Network tooling',
+      title: 'Passive Traffic Dissector',
+      detail: 'Go protocol decoding, HTTP inspection, PCAP replay and structured evidence.',
+      url: 'https://github.com/BSSE23029/netscope',
+    },
+    {
+      period: 'Low-level systems',
+      title: 'RISC-V Gradebook',
+      detail: 'Freestanding RV32IM assembly with raw Linux syscalls, bounded buffers and QEMU/RARS targets.',
+      url: 'https://github.com/BSSE23029/riscv-gradebook',
     },
   ],
 
@@ -150,7 +192,7 @@ export const portfolio = {
       },
       {
         title: 'Selected work',
-        items: ['Serverless URL Shortener', 'Multilingual Reading & Search', 'Tuberculosis Classification Pipeline', 'Passive Traffic Dissector', 'Traceable PDF Agents', 'Portunus P2P Engine'],
+        items: ['Serverless URL Shortener', 'Multilingual Reading & Search', 'Chess-Go', 'Tuberculosis Classification Pipeline', 'Passive Traffic Dissector', 'Traceable PDF Agents', 'Portunus P2P Engine'],
       },
       {
         title: 'Research & study',

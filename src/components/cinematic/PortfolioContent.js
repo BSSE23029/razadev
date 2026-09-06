@@ -35,6 +35,8 @@ function projectCard(project) {
     const details = element('button', 'project-card__details', 'View case study ↗');
     details.type = 'button';
     details.dataset.caseStudy = project.id;
+    details.setAttribute('aria-haspopup', 'dialog');
+    details.setAttribute('aria-controls', 'caseStudyDialog');
     actions.append(details);
   }
   if (project.url) actions.append(externalLink(project.url, 'GitHub ↗', 'project-card__github'));
@@ -62,6 +64,8 @@ function featuredProject(project) {
     const details = element('button', 'project-card__details', 'View case study ↗');
     details.type = 'button';
     details.dataset.caseStudy = project.id;
+    details.setAttribute('aria-haspopup', 'dialog');
+    details.setAttribute('aria-controls', 'caseStudyDialog');
     actions.append(details);
   }
   if (project.url) actions.append(externalLink(project.url, 'Open on GitHub ↗', 'project-card__github'));
@@ -92,6 +96,7 @@ export class PortfolioContent {
     this.renderFeatured('signalProjects', this.content.projects.signal);
     this.renderProjectList('coreProjects', this.content.projects.core);
     this.renderProfile();
+    this.renderGithubBuilds();
     this.renderSocials();
     this.bindCaseStudies();
     this.renderResume();
@@ -117,6 +122,21 @@ export class PortfolioContent {
     this.content.profileFacts.forEach(fact => target.append(factRow(fact)));
   }
 
+  renderGithubBuilds() {
+    const target = document.getElementById('githubBuildLog');
+    if (!target) return;
+    this.content.githubBuilds?.forEach(build => {
+      const article = element('article', 'github-build');
+      const header = element('div', 'github-build__header');
+      header.append(element('small', '', build.period), externalLink(build.url, 'GitHub ↗', 'github-build__link'));
+      article.append(header);
+      const title = element('h3');
+      title.append(externalLink(build.url, build.title, 'github-build__title'));
+      article.append(title, element('p', '', build.detail));
+      target.append(article);
+    });
+  }
+
   renderSocials() {
     const target = document.getElementById('socialLinks');
     this.content.socials.forEach(item => {
@@ -138,6 +158,7 @@ export class PortfolioContent {
       this.renderCaseStudy(dialog, project);
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', '');
+      dialog.querySelector('.case-study-dialog__close')?.focus();
     }));
     dialog.addEventListener('click', event => { if (event.target === dialog) this.closeCaseStudy(dialog); });
     dialog.addEventListener('close', () => this.caseStudyTrigger?.focus());
@@ -149,17 +170,27 @@ export class PortfolioContent {
     const sheet = element('div', 'case-study-sheet');
     const header = element('header', 'case-study-sheet__header');
     const identity = element('div');
+    const projects = [...this.content.projects.surface, ...this.content.projects.signal, ...this.content.projects.core];
+    const projectIndex = projects.findIndex(item => item.id === project.id);
+    const index = element('span', 'case-study-sheet__index', `${String(projectIndex + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`);
     const caseStudyTitle = element('h2', '', project.title);
     caseStudyTitle.id = 'caseStudyTitle';
-    identity.append(element('small', '', project.caseStudy.label), caseStudyTitle, element('p', '', project.eyebrow));
+    identity.append(index, element('small', '', `Selected work · ${project.caseStudy.label}`), caseStudyTitle, element('p', '', project.eyebrow));
+    if (project.stack?.length) {
+      const stack = element('ul', 'case-study-stack');
+      project.stack.forEach(item => stack.append(element('li', '', item)));
+      identity.append(stack);
+    }
     const close = element('button', 'case-study-dialog__close', 'Close');
     close.type = 'button';
     close.addEventListener('click', () => this.closeCaseStudy(dialog));
     header.append(identity, close);
     sheet.append(header);
-    [['Problem', project.caseStudy.problem], ['Approach', project.caseStudy.approach], ['Result', project.caseStudy.result]].forEach(([title, copy]) => {
-      const block = element('section', 'case-study-block');
-      block.append(element('h3', '', title), element('p', '', copy));
+    [['01', 'Problem', project.caseStudy.problem], ['02', 'Approach', project.caseStudy.approach], ['03', 'Result', project.caseStudy.result]].forEach(([number, title, copy]) => {
+      const block = element('section', `case-study-block case-study-block--${title.toLowerCase()}`);
+      const heading = element('h3');
+      heading.append(element('span', 'case-study-block__index', number), document.createTextNode(title));
+      block.append(heading, element('p', '', copy));
       sheet.append(block);
     });
     const actions = element('div', 'case-study-sheet__actions');
@@ -230,6 +261,7 @@ export class PortfolioContent {
     trigger.addEventListener('click', () => {
       if (typeof dialog.showModal === 'function') dialog.showModal();
       else dialog.setAttribute('open', '');
+      dialog.querySelector('.cv-dialog__close')?.focus();
     });
     close.addEventListener('click', closeDialog);
     print.addEventListener('click', () => window.print());

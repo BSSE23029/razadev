@@ -6,6 +6,8 @@ export class ChapterController {
     this.primaryNavigation = [...document.querySelectorAll('.site-header nav a')];
     this.mobileMenu = document.getElementById('mobileMenu');
     this.menuButton = document.getElementById('menuButton');
+    this.menuClose = document.getElementById('menuClose');
+    this.menuTrigger = null;
     this.observe();
     this.bindAnchors();
     this.bindMenu();
@@ -51,13 +53,18 @@ export class ChapterController {
     this.menuButton.addEventListener('click', () => {
       if (this.mobileMenu.open) this.closeMenu();
       else {
+        this.menuTrigger = this.menuButton;
         if (typeof this.mobileMenu.showModal === 'function') this.mobileMenu.showModal();
         else this.mobileMenu.setAttribute('open', '');
         this.menuButton.setAttribute('aria-expanded', 'true');
+        this.menuClose?.focus();
       }
     });
-    document.getElementById('menuClose')?.addEventListener('click', () => this.closeMenu());
-    this.mobileMenu.addEventListener('close', () => this.menuButton.setAttribute('aria-expanded', 'false'));
+    this.menuClose?.addEventListener('click', () => this.closeMenu());
+    this.mobileMenu.addEventListener('close', () => {
+      this.menuButton.setAttribute('aria-expanded', 'false');
+      this.menuTrigger?.focus();
+    });
   }
 
   closeMenu() {

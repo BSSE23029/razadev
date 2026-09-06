@@ -14,10 +14,29 @@ const budgets = [
   { label: 'initial JS', pattern: /^main-[^/]+\.js$/, limit: 20 * 1024 },
   { label: 'initial CSS', pattern: /^main-[^/]+\.css$/, limit: 9 * 1024 },
   { label: 'deferred 3D JS', pattern: /^ScrollWorld-[^/]+\.js$/, limit: 160 * 1024 },
-  { label: 'logo texture', pattern: /^raza_logo_ui-[^/]+\.webp$/, limit: 24 * 1024 },
+  { label: 'logo texture', pattern: /^raza_logo_ui_small-[^/]+\.webp$/, limit: 12 * 1024 },
+];
+let failed = false;
+
+const initialJsName = findAsset(/^main-[^/]+\.js$/, 'initial JS');
+const deferredJsName = findAsset(/^ScrollWorld-[^/]+\.js$/, 'deferred 3D JS');
+const initialJs = await readFile(new URL(`../dist/assets/${initialJsName}`, import.meta.url), 'utf8');
+const deferredJs = await readFile(new URL(`../dist/assets/${deferredJsName}`, import.meta.url), 'utf8');
+const forbiddenInitialPatterns = [
+  { label: 'Three.js in initial JS', pattern: /WebGLRenderer|RoundedBoxGeometry|three\/build/ },
+  { label: 'runtime GitHub API in initial JS', pattern: /api\.github\.com|github-readme-stats|profile-summary-cards|streak-stats/ },
 ];
 
-let failed = false;
+for (const check of forbiddenInitialPatterns) {
+  const failedCheck = check.pattern.test(initialJs);
+  console.log(`${failedCheck ? 'FAIL' : 'PASS'} ${check.label}`);
+  if (failedCheck) failed = true;
+}
+
+const deferredHasSceneCode = /WebGLRenderer|RoundedBoxGeometry/.test(deferredJs);
+console.log(`${deferredHasSceneCode ? 'PASS' : 'FAIL'} deferred scene contains Three.js renderer code`);
+if (!deferredHasSceneCode) failed = true;
+
 for (const budget of budgets) {
   const name = findAsset(budget.pattern, budget.label);
   const file = new URL(`../dist/assets/${name}`, import.meta.url);
