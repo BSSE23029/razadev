@@ -15,11 +15,9 @@ const canCreateWebGL = () => {
   }
 };
 
-const skipScene = reducedMotion
-  || Boolean(navigator.connection?.saveData)
-  || navigator.hardwareConcurrency <= 2
-  || navigator.deviceMemory <= 2
-  || !canCreateWebGL();
+// Low-power and data-saver devices still get the space language through the
+// scene's low tier; only reduced motion and unavailable WebGL skip the module.
+const skipScene = reducedMotion || !canCreateWebGL();
 
 const revealLoader = () => {
   requestAnimationFrame(() => {

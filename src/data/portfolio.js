@@ -91,6 +91,12 @@ export const portfolio = {
         description: 'Decorators, controllers, middleware and service-oriented modules.',
         stack: ['TypeScript', 'NestJS', 'Node'],
         url: 'https://github.com/BSSE23029/ts_server_decorators',
+        caseStudy: {
+          label: 'Backend engineering',
+          problem: 'A growing server becomes difficult to reason about when routing, middleware and business services are mixed together.',
+          approach: 'Explored decorators, controllers, route handlers and middleware as explicit layers, then organized the implementation around service-oriented modules and NestJS patterns.',
+          result: 'A clearer backend foundation that makes request flow and service boundaries easier to inspect and extend.',
+        },
       },
       {
         eyebrow: 'Traceable workflows',
@@ -98,6 +104,12 @@ export const portfolio = {
         description: 'Worker processes, Redis, vector retrieval and tracing integrations.',
         stack: ['Python', 'LangChain', 'Redis', 'Langfuse'],
         url: 'https://github.com/BSSE23029/langchain_pdf_tracibility',
+        caseStudy: {
+          label: 'Applied AI + backend',
+          problem: 'PDF retrieval prototypes need more than an answer: their sources, worker behavior and failure modes must remain traceable.',
+          approach: 'Combined Flask endpoints, worker processes, Redis-backed coordination, vector retrieval and Langfuse-oriented tracing around the document workflow.',
+          result: 'A retrieval-augmented prototype that keeps the path from uploaded document to generated answer inspectable.',
+        },
       },
       {
         eyebrow: 'Systems architecture · Rust',
@@ -105,6 +117,12 @@ export const portfolio = {
         description: 'A high-performance, gRPC-controlled peer-to-peer engine for binary networking, service discovery and async storage.',
         stack: ['Rust', 'gRPC', 'P2P'],
         url: 'https://github.com/BSSE23029/portunus',
+        caseStudy: {
+          label: 'Systems architecture',
+          problem: 'Peer-to-peer infrastructure has to coordinate discovery, binary transport and asynchronous storage without hiding the system boundaries.',
+          approach: 'Designed a reusable Rust engine around gRPC control, binary networking, service discovery and async storage components.',
+          result: 'A focused systems build that exposes the infrastructure path instead of burying it behind a single application surface.',
+        },
       },
       {
         eyebrow: 'Full-stack web',
@@ -112,6 +130,12 @@ export const portfolio = {
         description: 'A structured management workflow spanning React, Node.js, PostgreSQL and AWS-oriented deployment work.',
         stack: ['React', 'Node.js', 'PostgreSQL'],
         url: 'https://github.com/BSSE23029/DBMS-HMS-PROJECT',
+        caseStudy: {
+          label: 'Full-stack web',
+          problem: 'Operational management software has to keep structured records, server workflows and user-facing screens aligned.',
+          approach: 'Connected React interfaces to Node.js services and PostgreSQL data workflows, with deployment work shaped around AWS-oriented infrastructure.',
+          result: 'A full-stack implementation that treats data management and interaction design as one connected workflow.',
+        },
       },
     ],
   },
@@ -121,7 +145,7 @@ export const portfolio = {
       role: 'Flutter Developer Intern',
       organization: 'Granjur Technologies',
       period: 'Jun — Aug 2025',
-      detail: 'Production mobile development',
+      detail: '3 months · Production mobile development',
     },
   ],
 
@@ -157,6 +181,12 @@ export const portfolio = {
       url: 'https://github.com/BSSE23029/netscope',
     },
     {
+      period: 'Flutter · mobile tooling',
+      title: 'Roxum IDE',
+      detail: 'A mobile-first Flutter code editor with terminal workflows, Git/GitHub tooling, AI assistance and a Rust-backed editor engine.',
+      url: 'https://github.com/BSSE23029/roxum-ide',
+    },
+    {
       period: 'Low-level systems',
       title: 'RISC-V Gradebook',
       detail: 'Freestanding RV32IM assembly with raw Linux syscalls, bounded buffers and QEMU/RARS targets.',
@@ -181,7 +211,7 @@ export const portfolio = {
     summary: 'Software Engineer focused on Flutter mobile development, TypeScript/NestJS backends, and applied AI. Comfortable moving between user-facing product work and the systems that support it.',
     highlights: [
       { label: 'Focus', value: 'Flutter · TypeScript/NestJS · Applied AI' },
-      { label: 'Experience', value: 'Flutter Developer Intern · Granjur Technologies · Jun — Aug 2025' },
+      { label: 'Experience', value: 'Flutter Developer Intern · Granjur Technologies · 3 months · Jun — Aug 2025' },
       { label: 'Education', value: 'BS Software Engineering · 2023 — Present' },
       { label: 'Research', value: 'IEEE ICIC 2025 · 98.53% accuracy · 97.54% MCC' },
     ],
