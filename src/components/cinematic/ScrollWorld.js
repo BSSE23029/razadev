@@ -22,8 +22,10 @@ import {
   PlaneGeometry,
   Points,
   PointsMaterial,
+  RingGeometry,
   SRGBColorSpace,
   Scene,
+  ShaderMaterial,
   SphereGeometry,
   TextureLoader,
   Timer,
@@ -55,7 +57,7 @@ const QUALITY = veryLowPower
       stars: 240,
       spaceStars: 24,
       maxFps: 24,
-      animate: false,
+      animate: true,
     }
   : lowPower || compact
   ? {
@@ -77,7 +79,7 @@ const QUALITY = veryLowPower
 
 if (qualityOverride === 'low') Object.assign(QUALITY, {
   name: 'low', pixelRatio: 1, stars: 240, spaceStars: 24,
-  maxFps: 24, animate: false,
+  maxFps: 24, animate: true,
 });
 if (qualityOverride === 'medium') Object.assign(QUALITY, {
   name: 'medium', pixelRatio: 1.15, stars: 760, spaceStars: 48,
@@ -99,6 +101,7 @@ class ScrollWorld {
     this.animated = [];
     this.pathTarget = new Vector3();
     this.hidden = document.hidden;
+    this.focused = true;
     this.paused = false;
     this.contextLost = false;
     this.lastAnimationRender = 0;
@@ -110,6 +113,7 @@ class ScrollWorld {
     this.debugStats = { fps: 0, frameMs: 0 };
     this.materialCache = new Map();
     this.basicMaterialCache = new Map();
+    this.portalTextureLoads = { requested: 0, loaded: 0, failed: 0 };
     this.quality = QUALITY;
     this.runtimePixelRatio = Infinity;
     this.frameBudget = { samples: 0, averageMs: 0, adjustments: 0 };
@@ -120,6 +124,7 @@ class ScrollWorld {
     this.scrollRange = 1;
     this.pathProgress = -1;
     this.baseTarget = new Vector3();
+    this.chapterPulse = { active: false, startedAt: 0 };
     this.boundResize = () => this.resize();
     this.boundPointerMove = event => {
       if (event.pointerType && event.pointerType !== 'mouse') return;
@@ -136,6 +141,16 @@ class ScrollWorld {
         this._setAnimationLoop(false);
         return;
       }
+      this.clock.reset();
+      this._setAnimationLoop(true);
+      this.renderFrame();
+    };
+    this.boundWindowBlur = () => {
+      this.focused = false;
+      this._setAnimationLoop(false);
+    };
+    this.boundWindowFocus = () => {
+      this.focused = true;
       this.clock.reset();
       this._setAnimationLoop(true);
       this.renderFrame();
@@ -158,6 +173,13 @@ class ScrollWorld {
       this.clock.reset();
       this._setAnimationLoop(true);
       this.renderFrame();
+    };
+    this.boundChapterChange = () => {
+      if (this.motionReduced || this.destroyed) return;
+      this.chapterPulse.active = true;
+      this.chapterPulse.startedAt = performance.now();
+      this._setAnimationLoop(true);
+      this._requestRender();
     };
     this.boundContextLost = event => {
       event.preventDefault();
@@ -183,6 +205,9 @@ class ScrollWorld {
     this.canvas.addEventListener('webglcontextrestored', this.boundContextRestored);
     window.addEventListener('pagehide', this.boundPageHide);
     window.addEventListener('pageshow', this.boundPageShow);
+    window.addEventListener('blur', this.boundWindowBlur);
+    window.addEventListener('focus', this.boundWindowFocus);
+    document.addEventListener('raza:chapterchange', this.boundChapterChange);
     this._setAnimationLoop(true);
     if (debug) {
       window.__RAZA_SCENE__ = this;
@@ -228,7 +253,7 @@ class ScrollWorld {
       stars: 240,
       spaceStars: 24,
       maxFps: 24,
-      animate: false,
+      animate: true,
     });
   }
 
@@ -306,7 +331,7 @@ class ScrollWorld {
   }
 
   _hasVisibleMotion() {
-    if (!this.quality.animate || this.motionReduced || this.paused) return false;
+    if (!this.quality.animate || this.motionReduced || this.paused || !this.focused) return false;
     return Boolean(this.spaceBackdrop?.visible);
   }
 
@@ -391,7 +416,9 @@ class ScrollWorld {
   }
 
   _createPortalTextureLayer(group, url, count, radiusScale, zSpread, color, opacity, speed, seed = 0) {
-    new TextureLoader().load(url, texture => {
+    this.portalTextureLoads.requested += 1;
+    const onLoad = texture => {
+      this.portalTextureLoads.loaded += 1;
       // The reference effect is texture-led. Keep the files lazy and let the
       // procedural portal render immediately underneath while they decode.
       if (this.destroyed || !group.parent) {
@@ -443,7 +470,14 @@ class ScrollWorld {
       group.userData.portalMaterials?.push(material);
       group.userData.portalMaterialOpacities?.push(opacity);
       this._requestRender();
-    });
+    };
+    const onError = () => {
+      // A missing optional smoke layer must never blank the scene: the
+      // procedural aperture, rings and dust are the guaranteed baseline.
+      this.portalTextureLoads.failed += 1;
+      this._requestRender();
+    };
+    new TextureLoader().load(url, onLoad, undefined, onError);
   }
 
   _createSpaceWorld() {
@@ -459,30 +493,169 @@ class ScrollWorld {
     // layers use shared instancing so the effect stays atmospheric without
     // turning every smoke card into a separate draw call.
     const portalBackdropGeometry = new CircleGeometry(7.4, compact ? 32 : 48);
-    const portalGlowPositions = portalBackdropGeometry.getAttribute('position');
-    const portalGlowColors = new Float32Array(portalGlowPositions.count * 3);
-    const portalGlowCore = new Color(0x1b75c7);
-    const portalGlowEdge = new Color(0x020810);
-    const portalGlowColor = new Color();
-    for (let index = 0; index < portalGlowPositions.count; index += 1) {
-      const radius = MathUtils.clamp(Math.hypot(portalGlowPositions.getX(index), portalGlowPositions.getY(index)) / 7.4, 0, 1);
-      portalGlowColor.copy(portalGlowCore).lerp(portalGlowEdge, Math.pow(radius, 0.72));
-      portalGlowColors.set([portalGlowColor.r, portalGlowColor.g, portalGlowColor.b], index * 3);
-    }
-    portalBackdropGeometry.setAttribute('color', new BufferAttribute(portalGlowColors, 3));
+    const portalBackdropMaterial = new ShaderMaterial({
+      uniforms: {
+        coreColor: { value: new Color(0x1b75c7) },
+        edgeColor: { value: new Color(0x061426) },
+        sceneOpacity: { value: 0.18 },
+        time: { value: 0 },
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: AdditiveBlending,
+      vertexShader: `
+        varying vec2 portalUv;
+        void main() {
+          portalUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 coreColor;
+        uniform vec3 edgeColor;
+        uniform float sceneOpacity;
+        uniform float time;
+        varying vec2 portalUv;
+        void main() {
+          vec2 centered = portalUv - vec2(0.5);
+          float angle = atan(centered.y, centered.x);
+          float radius = length(centered * vec2(1.0, 1.22)) * 2.0;
+          float warp = sin(angle * 3.0 + time * 0.16 + radius * 7.0) * 0.018;
+          radius += warp;
+          float falloff = 1.0 - smoothstep(0.54, 1.0, radius);
+          float core = 1.0 - smoothstep(0.0, 0.76, radius);
+          float horizon = smoothstep(0.52, 0.76, radius) * (1.0 - smoothstep(0.76, 0.98, radius));
+          vec3 color = mix(edgeColor, coreColor, core);
+          float alpha = sceneOpacity * falloff * (0.26 + core * 0.56 + horizon * 0.18);
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+    });
     const portalBackdrop = new Mesh(
       portalBackdropGeometry,
-      new MeshBasicMaterial({
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.32,
-        depthWrite: false,
-        blending: AdditiveBlending,
-      }),
+      portalBackdropMaterial,
     );
     portalBackdrop.position.z = -3.4;
     portalBackdrop.renderOrder = -3;
     group.add(portalBackdrop);
+
+    // Give the centre a real aperture instead of leaving the smoke over a
+    // single bright disc. The halo sits behind a low-opacity dark lens; the
+    // rim then catches the cool edge light and makes the portal feel deep.
+    const apertureHaloMaterial = portalBackdropMaterial.clone();
+    apertureHaloMaterial.uniforms.coreColor.value.set(0x236dce);
+    apertureHaloMaterial.uniforms.edgeColor.value.set(0x091932);
+    apertureHaloMaterial.uniforms.sceneOpacity.value = 0.16;
+    const apertureHalo = new Mesh(
+      new CircleGeometry(3.18, compact ? 32 : 48),
+      apertureHaloMaterial,
+    );
+    apertureHalo.position.z = -0.72;
+    apertureHalo.renderOrder = -0.72;
+    group.add(apertureHalo);
+
+    const aperture = new Mesh(
+      new CircleGeometry(2.62, compact ? 32 : 48),
+      new ShaderMaterial({
+        uniforms: {
+          sceneOpacity: { value: 0.58 },
+          time: { value: 0 },
+        },
+        transparent: true,
+        depthWrite: false,
+        vertexShader: `
+          varying vec2 apertureUv;
+          void main() {
+            apertureUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform float sceneOpacity;
+          uniform float time;
+          varying vec2 apertureUv;
+          void main() {
+            vec2 centered = (apertureUv - vec2(0.5)) * 2.0;
+            float radius = length(centered);
+            float angle = atan(centered.y, centered.x);
+            float wave = sin(angle * 2.0 + time * 0.12 + radius * 12.0) * 0.018;
+            float horizon = 1.0 - smoothstep(0.02, 0.16, abs(radius - (0.72 + wave)));
+            float edge = smoothstep(0.54, 0.96, radius);
+            float shape = 1.0 - smoothstep(0.92, 1.02, radius);
+            vec3 voidColor = mix(vec3(0.002, 0.006, 0.014), vec3(0.006, 0.025, 0.055), edge * 0.8);
+            vec3 horizonColor = vec3(0.015, 0.11, 0.22) * horizon;
+            gl_FragColor = vec4(voidColor + horizonColor, sceneOpacity * shape);
+          }
+        `,
+      }),
+    );
+    aperture.position.z = -0.56;
+    aperture.scale.y = 0.76;
+    aperture.renderOrder = -0.56;
+    group.add(aperture);
+
+    const apertureRim = new Mesh(
+      new RingGeometry(2.62, 2.69, compact ? 40 : 64),
+      new MeshBasicMaterial({
+        color: COLORS.ice,
+        transparent: true,
+        opacity: 0.28,
+        depthWrite: false,
+        blending: AdditiveBlending,
+      }),
+    );
+    apertureRim.position.z = -0.44;
+    apertureRim.scale.y = 0.76;
+    apertureRim.renderOrder = -0.44;
+    group.add(apertureRim);
+
+    // A portal needs a hard visual grammar underneath the soft smoke. These
+    // rings are deliberately simple geometry: they give the eye a stable
+    // aperture, depth, and direction without adding a post-processing pass.
+    const portalRings = [];
+    const portalArcs = [];
+    const addRing = (radius, thickness, color, opacity, z, speed, scaleY, phase = 0) => {
+      const ring = new Mesh(
+        new RingGeometry(radius - thickness, radius, compact ? 40 : 64),
+        new MeshBasicMaterial({
+          color,
+          transparent: true,
+          opacity,
+          depthWrite: false,
+          blending: AdditiveBlending,
+        }),
+      );
+      ring.position.z = z;
+      ring.rotation.z = phase;
+      ring.scale.y = scaleY;
+      ring.renderOrder = -2;
+      group.add(ring);
+      portalRings.push({ ring, speed, phase, scaleY, baseOpacity: opacity });
+    };
+    addRing(6.85, 0.018, 0x89d9ff, 0.1, -2.72, 0.006, 0.72, 0.08);
+    addRing(5.38, 0.028, COLORS.cyan, 0.14, -1.74, -0.012, 0.76, -0.2);
+    addRing(3.76, 0.022, COLORS.ice, 0.17, -0.84, 0.018, 0.8, 0.32);
+    if (this.quality.name !== 'low') addRing(2.18, 0.014, 0x5b9dff, 0.13, -0.28, -0.024, 0.84, -0.44);
+
+    const arcCount = this.quality.name === 'low' ? 2 : 3;
+    for (let index = 0; index < arcCount; index += 1) {
+      const start = index * (Math.PI * 2 / arcCount) + 0.24;
+      const arc = new Mesh(
+        new RingGeometry(6.28, 6.34, compact ? 32 : 48, 1, start, Math.PI * 0.62),
+        new MeshBasicMaterial({
+          color: index === 1 ? COLORS.cyan : 0x8fbfff,
+          transparent: true,
+          opacity: 0.14,
+          depthWrite: false,
+          blending: AdditiveBlending,
+        }),
+      );
+      arc.position.z = -2.5;
+      arc.scale.y = 0.72;
+      arc.renderOrder = -1;
+      group.add(arc);
+      portalArcs.push({ arc, speed: index % 2 ? -0.018 : 0.014, baseOpacity: 0.14 });
+    }
 
     const spiralCount = compact ? 52 : this.quality.name === 'low' ? 72 : this.quality.spaceStars * 2;
     const spiralPositions = new Float32Array(spiralCount * 3);
@@ -573,11 +746,36 @@ class ScrollWorld {
       persistent,
       galaxy,
       coreSignal,
+      apertureHalo,
+      aperture,
+      apertureRim,
       portalSpiral,
+      portalRings,
+      portalArcs,
       portalLayers: [],
-      portalMaterials: [portalBackdrop.material, portalSpiral.material, galaxy.material],
-      portalMaterialOpacities: [0.32, 0.48, 0.68],
+      portalMaterials: [
+        portalBackdrop.material,
+        apertureHalo.material,
+        aperture.material,
+        apertureRim.material,
+        portalSpiral.material,
+        galaxy.material,
+        ...portalRings.map(({ ring }) => ring.material),
+        ...portalArcs.map(({ arc }) => arc.material),
+      ],
+      portalMaterialOpacities: [
+        0.18,
+        0.16,
+        0.58,
+        0.28,
+        0.48,
+        0.68,
+        ...portalRings.map(({ baseOpacity }) => baseOpacity),
+        ...portalArcs.map(({ baseOpacity }) => baseOpacity),
+      ],
       portalIntensity: null,
+      portalTargetIntensity: null,
+      portalShaderMaterials: [portalBackdrop.material, apertureHalo.material, aperture.material],
     };
     group.userData.basePosition = group.position.clone();
     group.userData.baseRotation = new Vector3(group.rotation.x, group.rotation.y, group.rotation.z);
@@ -662,23 +860,24 @@ class ScrollWorld {
     this._syncScroll(true);
   }
 
-  _updateAssetVisibility(progress) {
-    this._updatePortalIntensity(progress);
+  _updateAssetVisibility(progress, transitionPulse = 0) {
+    this._updatePortalIntensity(progress, transitionPulse);
     this._setAnimationLoop(!this.paused);
   }
 
-  _updatePortalIntensity(progress) {
+  _updatePortalIntensity(progress, transitionPulse = 0) {
     const portal = this.spaceBackdrop?.userData;
     if (!portal?.persistent || !portal.portalMaterials) return;
-    // Let the shared world breathe: the portal is the hero at the opening and
-    // close, while the middle chapters keep enough atmosphere to support the
-    // content without competing with it.
-    const distanceFromEdge = Math.min(progress, 1 - progress);
-    const middlePresence = MathUtils.smoothstep(distanceFromEdge, 0.08, 0.46);
-    // Keep the shared portal legible behind the glass chapters. The middle
-    // chapters recede it, but never erase the one visual world tying them
-    // together.
-    const intensity = 1 - middlePresence * 0.58;
+    // Let the shared world breathe: it leads the hero and contact chapters,
+    // then recedes behind dense project/profile content without disappearing.
+    const heroFocus = 1 - MathUtils.smoothstep(progress, 0.04, 0.22);
+    const contactFocus = MathUtils.smoothstep(progress, 0.78, 0.96);
+    const edgeFocus = Math.max(heroFocus, contactFocus);
+    const targetIntensity = Math.min(1, 0.28 + edgeFocus * 0.72 + transitionPulse * 0.08);
+    const intensity = portal.portalIntensity === null || this.motionReduced || this.paused
+      ? targetIntensity
+      : MathUtils.lerp(portal.portalIntensity, targetIntensity, 0.12);
+    portal.portalTargetIntensity = targetIntensity;
     const intensityChanged = portal.portalIntensity === null || Math.abs(portal.portalIntensity - intensity) > 0.0001;
     const layersFading = portal.portalLayers?.some(layerRecord => layerRecord.fadeDuration > 0);
     if (!intensityChanged && !layersFading) return;
@@ -686,7 +885,9 @@ class ScrollWorld {
     const now = performance.now();
     if (intensityChanged) {
       portal.portalMaterials.forEach((material, index) => {
-        material.opacity = portal.portalMaterialOpacities[index] * intensity;
+        const opacity = portal.portalMaterialOpacities[index] * intensity;
+        if (material.uniforms?.sceneOpacity) material.uniforms.sceneOpacity.value = opacity;
+        else material.opacity = opacity;
       });
     }
     portal.portalLayers?.forEach(layerRecord => {
@@ -743,6 +944,7 @@ class ScrollWorld {
         space: Boolean(this.spaceBackdrop),
         persistentSpace: Boolean(this.spaceBackdrop),
         portalLayers: this.spaceBackdrop?.userData.portalLayers?.length || 0,
+        portalTextures: { ...this.portalTextureLoads },
       },
       render: {
         calls: info.render.calls,
@@ -773,6 +975,9 @@ class ScrollWorld {
     window.removeEventListener('scroll', this.boundScroll);
     window.removeEventListener('pagehide', this.boundPageHide);
     window.removeEventListener('pageshow', this.boundPageShow);
+    window.removeEventListener('blur', this.boundWindowBlur);
+    window.removeEventListener('focus', this.boundWindowFocus);
+    document.removeEventListener('raza:chapterchange', this.boundChapterChange);
     document.removeEventListener('visibilitychange', this.boundVisibilityChange);
     this.sceneControl?.removeEventListener('click', this.onSceneControlClick);
     this.motionPreference?.removeEventListener?.('change', this.onMotionPreferenceChange);
@@ -809,6 +1014,10 @@ class ScrollWorld {
     const frameStart = measureFrame ? performance.now() : 0;
     const elapsed = this.quality.animate && !this.motionReduced && !this.paused ? this.clock.getElapsed() : 0;
     const progress = MathUtils.clamp(this.scroll.progress, 0, 1);
+    const chapterPulse = this.chapterPulse.active && !this.motionReduced && !this.paused
+      ? Math.sin(Math.PI * MathUtils.clamp((time - this.chapterPulse.startedAt) / 720, 0, 1))
+      : 0;
+    if (this.chapterPulse.active && time - this.chapterPulse.startedAt >= 720) this.chapterPulse.active = false;
     const pathChanged = progress !== this.pathProgress;
     if (pathChanged) {
       this.pathProgress = progress;
@@ -819,7 +1028,7 @@ class ScrollWorld {
     const previousPointerY = this.pointerEase.y;
     this.pointerEase.lerp(this.pointer, 0.035);
     const pointerChanged = Math.abs(previousPointerX - this.pointerEase.x) > 0.0001 || Math.abs(previousPointerY - this.pointerEase.y) > 0.0001;
-    this._updateAssetVisibility(progress);
+    this._updateAssetVisibility(progress, chapterPulse);
     if (pathChanged || pointerChanged) {
       this.pathTarget.copy(this.baseTarget);
       this.pathTarget.x += this.pointerEase.x * 0.22;
@@ -839,10 +1048,31 @@ class ScrollWorld {
         if (!object.visible) return;
         const { userData } = object;
         if (userData.portalSpiral) userData.portalSpiral.rotation.z = elapsed * 0.038;
+        userData.portalShaderMaterials?.forEach(material => {
+          if (material.uniforms?.time) material.uniforms.time.value = elapsed;
+        });
+        userData.portalRings?.forEach(({ ring, speed, phase, scaleY }) => {
+          ring.rotation.z = phase + elapsed * speed;
+          const breath = 1 + Math.sin(elapsed * 0.34 + phase) * 0.012;
+          ring.scale.y = scaleY * breath;
+        });
+        userData.portalArcs?.forEach(({ arc, speed }) => {
+          arc.rotation.z = elapsed * speed;
+        });
         userData.portalLayers?.forEach(({ layer, speed }) => {
           layer.rotation.z = elapsed * speed;
         });
         if (userData.galaxy) userData.galaxy.rotation.z = elapsed * 0.012;
+        if (userData.apertureHalo) {
+          const haloBreath = 1 + Math.sin(elapsed * 0.42) * 0.018;
+          userData.apertureHalo.scale.set(haloBreath, haloBreath * 0.76, 1);
+          userData.apertureHalo.rotation.z = elapsed * -0.006;
+        }
+        if (userData.aperture) {
+          const lensBreath = 1 + Math.sin(elapsed * 0.34 + 0.7) * 0.008;
+          userData.aperture.scale.set(lensBreath, lensBreath * 0.76, 1);
+        }
+        if (userData.apertureRim) userData.apertureRim.rotation.z = elapsed * 0.01;
         if (userData.coreSignal) userData.coreSignal.rotation.y = elapsed * 0.018;
         if (userData.persistent) {
           const basePosition = userData.basePosition;

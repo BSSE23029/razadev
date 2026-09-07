@@ -19,8 +19,55 @@ function externalLink(url, label, className = '') {
   return link;
 }
 
-function projectCard(project) {
+function motionReduced() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function presentDialog(dialog) {
+  if (typeof dialog.showModal === 'function') dialog.showModal();
+  else dialog.setAttribute('open', '');
+  if (motionReduced() || typeof dialog.animate !== 'function') return;
+  dialog.animate(
+    [
+      { opacity: 0, transform: 'translateY(18px) scale(.985)' },
+      { opacity: 1, transform: 'translateY(0) scale(1)' },
+    ],
+    { duration: 360, easing: 'cubic-bezier(.22,.8,.2,1)', fill: 'both' },
+  );
+}
+
+function dismissDialog(dialog) {
+  if (!dialog.open && !dialog.hasAttribute('open')) return;
+  const finish = () => {
+    dialog.removeAttribute('data-dialog-closing');
+    if (typeof dialog.close === 'function' && dialog.open) dialog.close();
+    else dialog.removeAttribute('open');
+  };
+  if (motionReduced() || typeof dialog.animate !== 'function') {
+    finish();
+    return;
+  }
+  if (dialog.dataset.dialogClosing === 'true') return;
+  dialog.dataset.dialogClosing = 'true';
+  dialog.animate(
+    [
+      { opacity: 1, transform: 'translateY(0) scale(1)' },
+      { opacity: 0, transform: 'translateY(12px) scale(.985)' },
+    ],
+    { duration: 240, easing: 'ease-in', fill: 'both' },
+  ).finished.then(finish, finish);
+}
+
+function projectCard(project, index = 0) {
   const article = element('article', 'project-card');
+  article.dataset.project = project.id || '';
+  article.dataset.projectIndex = String(index + 1).padStart(2, '0');
+  article.dataset.domain = project.domain || '';
+  const meta = element('div', 'project-card__meta');
+  meta.append(
+    element('span', 'project-card__index', String(index + 1).padStart(2, '0')),
+    element('span', 'project-card__kind', project.domain || project.caseStudy?.label || 'Selected build'),
+  );
   const heading = element('div');
   const title = element('div');
   const titleLink = project.url ? externalLink(project.url, project.title, 'project-card__title') : element('h3', '', project.title);
@@ -35,25 +82,41 @@ function projectCard(project) {
     const details = element('button', 'project-card__details', 'View case study ↗');
     details.type = 'button';
     details.dataset.caseStudy = project.id;
+    details.setAttribute('aria-label', `View ${project.title} case study`);
     details.setAttribute('aria-haspopup', 'dialog');
     details.setAttribute('aria-controls', 'caseStudyDialog');
     actions.append(details);
   }
   if (project.url) actions.append(externalLink(project.url, 'GitHub ↗', 'project-card__github'));
-  article.append(heading, element('p', '', project.description), stackList(project.stack), actions);
+  const stack = stackList(project.stack);
+  stack.className = 'project-card__stack';
+  article.append(meta, heading, element('p', '', project.description), stack, actions);
   return article;
 }
 
-function featuredProject(project) {
+function featuredProject(project, index = 0) {
   const article = element('article', 'feature-project project-card');
+  article.dataset.project = project.id || '';
+  article.dataset.projectIndex = String(index + 1).padStart(2, '0');
+  article.dataset.domain = project.domain || '';
+  const meta = element('div', 'project-card__meta');
+  meta.append(
+    element('span', 'project-card__index', String(index + 1).padStart(2, '0')),
+    element('span', 'project-card__kind', project.domain || project.caseStudy?.label || 'Featured build'),
+  );
   const heading = element('div', 'feature-project__top');
-  heading.append(element('small', '', project.eyebrow), element('span', '', project.meta || ''));
+  heading.append(
+    element('small', '', project.eyebrow),
+    element('span', 'project-card__kind', project.meta || ''),
+  );
   if (project.url) heading.append(element('span', 'project-card__arrow', '↗'));
   const title = project.url ? externalLink(project.url, project.title, 'feature-project__title') : element('h3', '', project.title);
   if (project.url) title.setAttribute('aria-label', `Open ${project.title} on GitHub`);
   const titleHeading = project.url ? element('h3') : title;
   if (project.url) titleHeading.append(title);
-  article.append(heading, titleHeading, element('p', '', project.description));
+  const stack = stackList(project.stack);
+  stack.className = 'project-card__stack feature-project__stack';
+  article.append(meta, heading, titleHeading, element('p', '', project.description), stack);
 
   const signal = element('div', 'signal-strip');
   signal.setAttribute('aria-hidden', 'true');
@@ -64,6 +127,7 @@ function featuredProject(project) {
     const details = element('button', 'project-card__details', 'View case study ↗');
     details.type = 'button';
     details.dataset.caseStudy = project.id;
+    details.setAttribute('aria-label', `View ${project.title} case study`);
     details.setAttribute('aria-haspopup', 'dialog');
     details.setAttribute('aria-controls', 'caseStudyDialog');
     actions.append(details);
@@ -104,12 +168,14 @@ export class PortfolioContent {
 
   renderProjectList(targetId, projects = []) {
     const target = document.getElementById(targetId);
-    projects.forEach(project => target.append(projectCard(project)));
+    projects.forEach((project, index) => target.append(projectCard(project, index)));
   }
 
   renderFeatured(targetId, projects = []) {
     const target = document.getElementById(targetId);
-    projects.forEach(project => target.append(project.featured ? featuredProject(project) : projectCard(project)));
+    [...projects]
+      .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+      .forEach((project, index) => target.append(project.featured ? featuredProject(project, index) : projectCard(project, index)));
   }
 
   renderProfile() {
@@ -125,7 +191,10 @@ export class PortfolioContent {
   renderGithubBuilds() {
     const target = document.getElementById('githubBuildLog');
     if (!target) return;
-    this.content.githubBuilds?.forEach(build => {
+    const builds = this.content.githubBuilds || [];
+    const status = target.parentElement?.querySelector('.profile-builds__header > span');
+    if (status) status.textContent = `${builds.length} builds · static snapshot`;
+    builds.forEach(build => {
       const article = element('article', 'github-build');
       const header = element('div', 'github-build__header');
       header.append(element('small', '', build.period), externalLink(build.url, 'GitHub ↗', 'github-build__link'));
@@ -156,17 +225,19 @@ export class PortfolioContent {
       if (!project?.caseStudy) return;
       this.caseStudyTrigger = trigger;
       this.renderCaseStudy(dialog, project);
-      if (typeof dialog.showModal === 'function') dialog.showModal();
-      else dialog.setAttribute('open', '');
+      presentDialog(dialog);
       dialog.querySelector('.case-study-dialog__close')?.focus();
     }));
     dialog.addEventListener('click', event => { if (event.target === dialog) this.closeCaseStudy(dialog); });
+    dialog.addEventListener('cancel', event => { event.preventDefault(); this.closeCaseStudy(dialog); });
     dialog.addEventListener('close', () => this.caseStudyTrigger?.focus());
   }
 
   renderCaseStudy(dialog, project) {
     const target = document.getElementById('caseStudyContent');
     target.replaceChildren();
+    dialog.setAttribute('aria-labelledby', 'caseStudyTitle');
+    dialog.removeAttribute('aria-label');
     const sheet = element('div', 'case-study-sheet');
     const header = element('header', 'case-study-sheet__header');
     const identity = element('div');
@@ -183,6 +254,7 @@ export class PortfolioContent {
     }
     const close = element('button', 'case-study-dialog__close', 'Close');
     close.type = 'button';
+    close.setAttribute('aria-label', 'Close case study');
     close.addEventListener('click', () => this.closeCaseStudy(dialog));
     header.append(identity, close);
     sheet.append(header);
@@ -200,8 +272,7 @@ export class PortfolioContent {
   }
 
   closeCaseStudy(dialog) {
-    if (typeof dialog.close === 'function') dialog.close();
-    else dialog.removeAttribute('open');
+    dismissDialog(dialog);
   }
 
   renderResume() {
@@ -217,6 +288,7 @@ export class PortfolioContent {
     identity.append(element('small', '', 'CV · Selected snapshot'), cvTitle, element('p', 'cv-sheet__role', `${cv.role} · ${cv.location}`));
     const close = element('button', 'cv-dialog__close', 'Close');
     close.type = 'button';
+    close.setAttribute('aria-label', 'Close CV snapshot');
     close.setAttribute('data-cv-close', '');
     header.append(identity, close);
     sheet.append(header, element('p', 'cv-sheet__summary', cv.summary));
@@ -241,12 +313,13 @@ export class PortfolioContent {
     sheet.append(columns);
 
     const actions = element('div', 'cv-sheet__actions');
-    const print = element('button', 'action action--primary', 'Print / save PDF ↗');
+    const print = element('button', 'action action--quiet', 'Print / save PDF ↗');
     print.type = 'button';
     print.setAttribute('data-cv-print', '');
-    const download = element('a', 'action action--quiet', 'Download CV ↓');
+    const download = element('a', 'action action--primary cv-download', 'Download PDF ↓');
     download.href = cv.pdf;
     download.download = 'muhammad-mukarram-raza-cv.pdf';
+    download.setAttribute('aria-label', 'Download CV PDF');
     actions.append(print, download, externalLink(cv.github, 'GitHub ↗', 'action action--quiet'), externalLink(cv.linkedin, 'LinkedIn ↗', 'action action--quiet'));
     sheet.append(actions);
     target.append(sheet);
@@ -254,18 +327,15 @@ export class PortfolioContent {
     const dialog = document.getElementById('cvDialog');
     const trigger = document.getElementById('cvTrigger');
     if (!dialog || !trigger) return;
-    const closeDialog = () => {
-      if (typeof dialog.close === 'function') dialog.close();
-      else dialog.removeAttribute('open');
-    };
+    const closeDialog = () => dismissDialog(dialog);
     trigger.addEventListener('click', () => {
-      if (typeof dialog.showModal === 'function') dialog.showModal();
-      else dialog.setAttribute('open', '');
+      presentDialog(dialog);
       dialog.querySelector('.cv-dialog__close')?.focus();
     });
     close.addEventListener('click', closeDialog);
     print.addEventListener('click', () => window.print());
     dialog.addEventListener('click', event => { if (event.target === dialog) closeDialog(); });
+    dialog.addEventListener('cancel', event => { event.preventDefault(); closeDialog(); });
     dialog.addEventListener('close', () => trigger.focus());
   }
 }

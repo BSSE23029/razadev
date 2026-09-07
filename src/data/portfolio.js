@@ -10,6 +10,7 @@ export const portfolio = {
       {
         id: 'url-shortener',
         eyebrow: 'Featured build · 2025',
+        domain: 'Frontend · Product',
         title: 'Serverless URL Shortener',
         description: 'A cross-platform client with authentication, MFA, dashboards, URL analytics and optimistic UI on a serverless AWS architecture.',
         stack: ['Flutter', 'Dart', 'AWS'],
@@ -24,6 +25,7 @@ export const portfolio = {
       {
         id: 'multilingual-reading',
         eyebrow: 'Cross-platform',
+        domain: 'Frontend · Search',
         title: 'Multilingual Reading & Search',
         description: 'A reading app with audio, bookmarks and localization across 128 languages, with vectorised search powered by Rust.',
         stack: ['Flutter', 'Rust', 'Cloudflare'],
@@ -40,11 +42,11 @@ export const portfolio = {
       {
         id: 'traffic-dissector',
         eyebrow: 'Network tooling · Go',
+        domain: 'Network · APIs',
         meta: 'TCP/IP',
         title: 'Passive Traffic Dissector',
         description: 'Layer-by-layer protocol decoding, HTTP inspection, PCAP replay, structured JSONL output, and golden tests.',
         stack: ['Go', 'PCAP', 'TCP/IP'],
-        featured: true,
         url: 'https://github.com/BSSE23029/netscope',
         caseStudy: {
           label: 'Network tooling',
@@ -56,10 +58,12 @@ export const portfolio = {
       {
         id: 'chess-go',
         eyebrow: 'Systems + terminal UI · Go',
+        domain: 'Systems · Engine',
         meta: 'Rules · Engine · Network',
         title: 'Chess-Go',
         description: 'A dependency-light Go chess toolkit combining a rules-first library, classical alpha-beta search, a responsive terminal UI, versioned network matches and deterministic tournaments.',
         stack: ['Go', 'Alpha-beta', 'HTTP/WebSocket', 'TUI'],
+        featured: true,
         url: 'https://github.com/bsse23029/chess-go',
         caseStudy: {
           label: 'Systems + game tooling',
@@ -71,6 +75,7 @@ export const portfolio = {
       {
         id: 'tb-classification',
         eyebrow: 'Medical AI · Research',
+        domain: 'AI · Research',
         meta: 'IEEE ICIC · 2025',
         title: 'Tuberculosis Classification Pipeline',
         description: 'A reproducible VGG16 transfer-learning pipeline for three-class chest X-ray classification, reporting 98.53% accuracy and 97.54% MCC.',
@@ -86,7 +91,9 @@ export const portfolio = {
     ],
     core: [
       {
+        id: 'typescript-backend',
         eyebrow: 'Service architecture',
+        domain: 'Backend',
         title: 'TypeScript Backend',
         description: 'Decorators, controllers, middleware and service-oriented modules.',
         stack: ['TypeScript', 'NestJS', 'Node'],
@@ -99,7 +106,9 @@ export const portfolio = {
         },
       },
       {
+        id: 'document-agents',
         eyebrow: 'Traceable workflows',
+        domain: 'AI · Backend',
         title: 'Document Agents',
         description: 'Worker processes, Redis, vector retrieval and tracing integrations.',
         stack: ['Python', 'LangChain', 'Redis', 'Langfuse'],
@@ -112,7 +121,9 @@ export const portfolio = {
         },
       },
       {
+        id: 'portunus-p2p',
         eyebrow: 'Systems architecture · Rust',
+        domain: 'Backend · Systems',
         title: 'Portunus P2P Engine',
         description: 'A high-performance, gRPC-controlled peer-to-peer engine for binary networking, service discovery and async storage.',
         stack: ['Rust', 'gRPC', 'P2P'],
@@ -125,7 +136,9 @@ export const portfolio = {
         },
       },
       {
+        id: 'hotel-management',
         eyebrow: 'Full-stack web',
+        domain: 'Full-stack',
         title: 'Hotel Management Systems',
         description: 'A structured management workflow spanning React, Node.js, PostgreSQL and AWS-oriented deployment work.',
         stack: ['React', 'Node.js', 'PostgreSQL'],
@@ -191,6 +204,12 @@ export const portfolio = {
       title: 'RISC-V Gradebook',
       detail: 'Freestanding RV32IM assembly with raw Linux syscalls, bounded buffers and QEMU/RARS targets.',
       url: 'https://github.com/BSSE23029/riscv-gradebook',
+    },
+    {
+      period: 'Applied AI · HCI',
+      title: 'Drowsiness Detection Pipeline',
+      detail: 'Edge-compatible driver monitoring with MediaPipe face mesh, MobileNetV2, geometric EAR, low-light reliability and temporal alarm escalation.',
+      url: 'https://github.com/BSSE23029/dowsiness_hci',
     },
   ],
 

@@ -3,6 +3,12 @@ import { portfolio } from './data/portfolio.js';
 import { PortfolioContent } from './components/cinematic/PortfolioContent.js';
 import { ChapterController } from './components/cinematic/ChapterController.js';
 
+// The portfolio is a scroll-led composition, so a browser restoring the last
+// scroll position on reload would open in the wrong chapter. Anchor navigation
+// is handled by ChapterController after boot.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const canCreateWebGL = () => {
   try {

@@ -3,6 +3,17 @@
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#02040b" />
   <meta name="description" content="Muhammad Mukarram Raza — software engineer building mobile products, network tools, and backend systems." />
+  <style>
+    :root{color-scheme:dark;background:#02040b}html,body{margin:0;background:#02040b}
+    .loader{position:fixed;inset:0;z-index:1000;display:grid;place-content:center;gap:24px;background:#02040b;color:#8b93a7;font:10px/1.2 monospace;letter-spacing:.18em;text-transform:uppercase}
+    .loader__mark{position:relative;width:96px;height:96px;margin:auto;display:grid;place-items:center}.loader__mark-rings{position:absolute;inset:0}
+    .loader__mark-rings span{position:absolute;inset:0;border:1px solid rgba(92,231,255,.16);border-top-color:#5ce7ff;border-radius:50%;animation:critical-spin 1.4s linear infinite}
+    .loader__mark-rings span:nth-child(2){inset:10px;border-top-color:rgba(169,221,255,.7);animation-direction:reverse;animation-duration:1s}
+    .loader__mark-rings span:nth-child(3){inset:24px;border:0;background:transparent;box-shadow:0 0 28px #5ce7ff;animation:critical-pulse 1.4s ease-in-out infinite}
+    .loader__mark img{position:relative;z-index:1;width:66px;height:66px;object-fit:contain}.loader p{margin:0}
+    @keyframes critical-spin{to{transform:rotate(360deg)}}@keyframes critical-pulse{50%{opacity:.35;transform:scale(.7)}}
+    @media(prefers-reduced-motion:reduce){.loader__mark-rings span{animation:none}}
+  </style>
   <title>Raza — Software Engineer</title><link rel="icon" href="/logos/dark/raza_logo.ico" /><link rel="preload" as="image" href="/logos/dark/raza_logo_ui_small.webp" type="image/webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -40,7 +51,7 @@
       <p class="eyebrow"><span>00</span> Software engineer · Systems + ML</p><h1>Engineering <em>the invisible.</em></h1>
       <p class="lede">I build Flutter products, modular backends and applied AI systems—from the interaction you touch to the infrastructure you never see.</p>
       <div class="hero-actions"><a class="action action--primary" href="#surface">Enter the system <span>↘</span></a><a class="action action--quiet" href="#profile">View profile ↘</a></div>
-    </div><div class="scroll-cue" aria-hidden="true"><span></span>Scroll to travel</div></section>
+    </div></section>
 
     <section class="chapter chapter--right" id="surface" data-chapter="surface"><div class="chapter__content project-copy">
       <p class="eyebrow"><span>01</span> Surface</p><h2>Frontend that<br />feels immediate.</h2>
@@ -61,7 +72,7 @@
     </div></section>
 
     <section class="chapter chapter--profile" id="profile" data-chapter="profile"><div class="chapter__content profile-copy">
-      <p class="eyebrow"><span>04</span> Profile</p><div class="profile-grid"><div><h2>One engineer.<br />The whole path.</h2><p>I move comfortably between product interfaces and the systems beneath them. Currently completing a BS in Software Engineering and building production experience across mobile and cloud software.</p><button class="cv-trigger" id="cvTrigger" type="button" aria-haspopup="dialog" aria-controls="cvDialog">View CV snapshot <span>↗</span></button></div>
+      <p class="eyebrow"><span>04</span> Profile</p><div class="profile-grid"><div><h2>One engineer.<br />The whole path.</h2><p>I move comfortably between product interfaces and the systems beneath them. Currently completing a BS in Software Engineering and building production experience across mobile and cloud software.</p><button class="cv-trigger" id="cvTrigger" type="button" aria-haspopup="dialog" aria-controls="cvDialog" aria-label="View CV snapshot and download PDF">View CV + download <span>↗</span></button></div>
       <dl id="profileFacts"></dl></div>
       <div class="profile-builds"><div class="profile-builds__header"><p class="eyebrow"><span>—</span> GitHub · selected builds</p><span>Curated at build time</span></div><div class="profile-builds__list" id="githubBuildLog"></div></div>
     </div></section>
@@ -73,7 +84,7 @@
       <footer><span>© 2026 Muhammad Mukarram Raza</span><a href="#origin">Return to origin ↑</a></footer>
     </div></section>
   </main>
-  <dialog class="case-study-dialog" id="caseStudyDialog" aria-labelledby="caseStudyTitle"><div id="caseStudyContent"></div></dialog>
+  <dialog class="case-study-dialog" id="caseStudyDialog" aria-label="Project case study"><div id="caseStudyContent"></div></dialog>
   <dialog class="cv-dialog" id="cvDialog" aria-labelledby="cvTitle"><div id="cvContent"></div></dialog>
   <noscript>This experience requires JavaScript. You can reach Raza at contact.raza.dev@gmail.com.</noscript>
 </body></html>
